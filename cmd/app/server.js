@@ -1,6 +1,10 @@
 const path = require('path');
 const express = require('express');
+const bodyParser = require('body-parser');
 const mysql = require('mysql');
+
+const database = require('../../database');
+const services = require('../../services');
 const api = require('../../api');
 
 // Connect to the MySQL database.
@@ -20,8 +24,16 @@ db.connect((err) => {
 // Create new express app.
 const app = express();
 
+// Support parsing of application/json type POST data.
+app.use(bodyParser.json());
+
+// Support parsing of application/x-www-form-urlencoded POST data.
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Create a new API.
-api(app, db);
+const dbServices = database(db);
+const appServices = services(dbServices);
+api(app, appServices);
 
 // Handle serving public files.
 app.use(express.static(path.join(__dirname, 'dist', 'public')));
