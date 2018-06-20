@@ -1,3 +1,5 @@
+const errors = require('../errors');
+
 // handleGet handles GET requests to the /api/songs endpoint.
 const handleGet = (app, services) => {
 	app.get('/api/songs', (req, res) => {

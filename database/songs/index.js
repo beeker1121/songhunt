@@ -24,8 +24,16 @@ class Database {
 				if (err)
 					return reject(err);
 
-				console.log("Inserted with ID: " + res.insertId);
-				resolve(res.insertId);
+				// Create a new song object.
+				var song = {
+					id: res.insertId,
+					title: opts.title,
+					artist: opts.artist,
+					url: opts.url
+				}
+
+				console.log("Inserted with ID: " + song.id);
+				resolve(song);
 			});
 		});
 	}
