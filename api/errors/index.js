@@ -60,11 +60,21 @@ class APIErrors extends Error {
 const defaultError = (req, res, apiError) => {
 	// Set the status code and return the error.
 	res.statusCode = apiError.status;
+
+	// Create error in proper format.
+	let error = {
+		status: apiError.status,
+		param: apiError.paramName,
+		detail: apiError.message
+	}
+
+	// If paramName is null or undefined,
+	// delete it.
+	if (typeof apiError.paramName === undefined || apiError.paramName === null)
+		delete error.param;
+
 	res.json({
-		errors: [{
-			status: apiError.status,
-			detail: apiError.message
-		}]
+		errors: [error]
 	});
 }
 
@@ -72,15 +82,21 @@ const defaultError = (req, res, apiError) => {
 //
 // @apiErrors APIErrors The set of API errors.
 const multipleErrors = (req, res, apiErrors) => {
-	// Format the error output.
+	// Create array to hold formatted errors.
 	var errors = [];
 
 	apiErrors.forEach((err) => {
+		// Create error in proper format.
 		let error = {
 			status: err.status,
 			param: err.paramName,
 			detail: err.message
 		};
+
+		// If paramName is null or undefined,
+		// delete it.
+		if (typeof err.paramName === undefined || err.paramName === null)
+			delete error.param;
 
 		errors.push(error);
 	});
