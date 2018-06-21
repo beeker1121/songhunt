@@ -41,7 +41,12 @@ class APIErrors extends Error {
 
 		// Set the properties.
 		this.status = status;
-		this.apiErrors = apiErrors || [];
+		this.errors = apiErrors || [];
+	}
+
+	// add appends an API error.
+	add(apiError) {
+		this.errors.push(apiError);
 	}
 }
 
@@ -58,9 +63,6 @@ class APIErrors extends Error {
 //   }]
 // }
 const defaultError = (req, res, apiError) => {
-	// Set the status code and return the error.
-	res.statusCode = apiError.status;
-
 	// Create error in proper format.
 	let error = {
 		status: apiError.status,
@@ -70,9 +72,11 @@ const defaultError = (req, res, apiError) => {
 
 	// If paramName is null or undefined,
 	// delete it.
-	if (typeof apiError.paramName === undefined || apiError.paramName === null)
+	if (typeof apiError.paramName === 'undefined' || apiError.paramName === null)
 		delete error.param;
 
+	// Set the status code and return the error.
+	res.statusCode = apiError.status;
 	res.json({
 		errors: [error]
 	});
@@ -85,7 +89,7 @@ const multipleErrors = (req, res, apiErrors) => {
 	// Create array to hold formatted errors.
 	var errors = [];
 
-	apiErrors.forEach((err) => {
+	apiErrors.errors.forEach((err) => {
 		// Create error in proper format.
 		let error = {
 			status: err.status,

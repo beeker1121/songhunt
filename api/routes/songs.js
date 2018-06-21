@@ -1,5 +1,3 @@
-const errors = require('../errors');
-
 // handleGet handles GET requests to the /api/songs endpoint.
 const handleGet = (app, services) => {
 	app.get('/api/songs', (req, res) => {
@@ -10,7 +8,7 @@ const handleGet = (app, services) => {
 
 // handlePost handles POST requests to the /api/songs endpoint.
 const handlePost = (app, services) => {
-	app.post('/api/songs', (req, res) => {
+	app.post('/api/songs', (req, res, next) => {
 		console.log("Will create with title as: " + req.body.title);
 
 		// Create a new song.
@@ -21,7 +19,7 @@ const handlePost = (app, services) => {
 		}).then((song) => {
 			res.json({ id: song.id });
 		}).catch((err) => {
-			res.status(400).json({ status: err.message });
+			next(err);
 		})
 	})
 }
