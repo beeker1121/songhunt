@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addSong } from '../actions/index';
+import { addSong } from '../actions/songs';
 
 // mapDispatchToProps allows us to map the dispatch function of react-redux to
 // our component. The dispatch function is passed as the first parameter, which
@@ -21,7 +21,9 @@ class ConnectedSongForm extends React.Component {
 
 		// Create form state.
 		this.state = {
-			title: ""
+			title: '',
+			artist: '',
+			url: ''
 		};
 
 		// Set 'this' scope to this class for methods.
@@ -30,18 +32,32 @@ class ConnectedSongForm extends React.Component {
 	}
 
 	handleChange(event) {
-		this.setState({ title: event.target.value});
+		switch (event.target.id) {
+			case 'title':
+				this.setState({ title: event.target.value});
+				break;
+			case 'artist':
+				this.setState({ artist: event.target.value});
+				break;
+			case 'url':
+				this.setState({ url: event.target.value});
+				break;
+		}
 	}
 
 	handleSubmit(event) {
 		event.preventDefault();
 
 		// Add the song.
-		const { title } = this.state;
-		this.props.addSong({title: title});
+		const song = this.state;
+		this.props.addSong(song);
 
 		// Reset state.
-		this.setState({title: ''});
+		this.setState({
+			title: '',
+			artist: '',
+			url: ''
+		});
 	}
 
 	render() {
@@ -49,6 +65,11 @@ class ConnectedSongForm extends React.Component {
 			<form onSubmit={this.handleSubmit}>
 				<label htmlFor="title">Title</label>
 				<input type="text" id="title" name="title" value={this.state.title} onChange={this.handleChange} />
+				<label htmlFor="artist">Artist</label>
+				<input type="text" id="artist" name="artist" value={this.state.artist} onChange={this.handleChange} />
+				<label htmlFor="url">URL</label>
+				<input type="text" id="url" name="url" value={this.state.url} onChange={this.handleChange} />
+
 				<button type="submit">Add Song</button>
 			</form>
 		);
