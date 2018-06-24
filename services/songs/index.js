@@ -62,6 +62,10 @@ class Service {
 			if (oes)
 				return reject(oes);
 
+			// Get the embed and thumbnail URLs.
+			opts.embedUrl = "https://fake.embed.soundcloud.com/";
+			opts.thumbnail = "https://fake.thumb.soundcloud.com/";
+
 			// Create the song in the database.
 			this.db.songs.create(opts).then((song) => {
 				console.log("Successfully saved the song");

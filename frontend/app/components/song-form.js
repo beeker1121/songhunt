@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addSong } from '../actions/songs';
 
@@ -75,6 +76,11 @@ class ConnectedSongForm extends React.Component {
 		);
 	}
 }
+
+// Ensure prop types.
+ConnectedSongForm.propTypes = {
+	addSong: PropTypes.func.isRequired
+};
 
 // SongForm is the react-redux connected song form component.
 const SongForm = connect(null, mapDispatchToProps)(ConnectedSongForm);

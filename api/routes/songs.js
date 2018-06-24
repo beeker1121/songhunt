@@ -1,8 +1,12 @@
 // handleGet handles GET requests to the /api/songs endpoint.
 const handleGet = (app, services) => {
-	app.get('/api/songs', (req, res) => {
-		services.songs.get();
-		res.send('Hello World!');
+	app.get('/api/songs', (req, res, next) => {
+		services.songs.get()
+		.then((songs) => {
+			res.json({ data: songs});
+		}).catch((err) => {
+			next(err);
+		})
 	});
 }
 
@@ -13,11 +17,12 @@ const handlePost = (app, services) => {
 
 		// Create a new song.
 		services.songs.create({
+			userId: 1,
 			title: req.body.title,
 			artist: req.body.artist,
 			url: req.body.url
 		}).then((song) => {
-			res.json({ id: song.id });
+			res.json({ data: song });
 		}).catch((err) => {
 			next(err);
 		})

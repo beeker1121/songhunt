@@ -49,16 +49,16 @@
   {
     data: [{
       id: 123,
+      user_id: 123,
+      created_at: "2018-06-19T01:00:00.000-7:00",
       title: "Song Title",
       artist: "Artist",
-      posted_by: 123,
-      posted_on: "2018-06-19T01:00:00.000-7:00",
       url: "https://soundcloud.com/song",
       embed_url: "https://embed.soundcloud.com/song",
       tags: ['house'],
       thumbnail: "https://soundcloud.com/images/123.png",
       upvotes: 123,
-      comments: 12
+      comments_count: 12
     }]
   }
 

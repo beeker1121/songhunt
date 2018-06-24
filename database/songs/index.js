@@ -1,6 +1,9 @@
 // Define the SQL queries used in methods.
-const getQuery = 'SELECT * FROM songhunt.songs';
-const createQuery = 'INSERT INTO songhunt.songs SET title=?, artist=?, url=?';
+const getQuery = (whereClause) => {
+	return `SELECT * FROM songhunt.songs${whereClause}`;
+}
+
+const createQuery = 'INSERT INTO songhunt.songs SET user_id=?, created_at=?, title=?, artist=?, url=?, embed_url=?, thumbnail=?';
 
 // Database defines the songs database.
 class Database {
@@ -10,27 +13,68 @@ class Database {
 
 	// get handles getting songs.
 	get(opts) {
-		console.log("Gonna get!");
+		return new Promise((resolve, reject) => {
+			// Create variables to hold the query fields
+			// being filtered on and their values.
+			let queryFields = '';
+			let queryValues = [];
+
+			// Build the full query.
+			let query = getQuery(queryFields);
+
+			// Get from the database.
+			this.db.query(query, [ ...queryValues ], (err, res) => {
+				if (err)
+					return reject(err);
+
+				// Create a new set of songs.
+				let songs = [];
+
+				// Loop through the results.
+				res.forEach((row) => {
+					// Create a new song.
+					let song = {
+						id: row.id,
+						user_id: 1,
+						created_at: row.created_at,
+						title: row.title,
+						artist: row.artist,
+						url: row.url,
+						embed_url: row.embed_url,
+						thumbnail: row.thumbnail
+					};
+
+					// Append it to the songs set.
+					songs.push(song);
+				});
+
+				resolve(songs);
+			});
+		});
 	}
 
 	// create handles creating a new song.
 	create(opts) {
-		console.log("Gonna create");
-
-		// Wrap within a Promise, since we use an
-		// anonymous callback to handle the response.
 		return new Promise((resolve, reject) => {
-			this.db.query(createQuery, [opts.title, opts.artist, opts.url], (err, res) => {
+			// Set the created at time.
+			let createdAt = new Date();
+
+			// Save to the database.
+			this.db.query(createQuery, [opts.userId, createdAt, opts.title, opts.artist, opts.url, opts.embedUrl, opts.thumbnail], (err, res) => {
 				if (err)
 					return reject(err);
 
 				// Create a new song object.
-				var song = {
+				let song = {
 					id: res.insertId,
+					user_id: opts.userId,
+					created_at: opts.createdAt,
 					title: opts.title,
 					artist: opts.artist,
-					url: opts.url
-				}
+					url: opts.url,
+					embed_url: opts.embedUrl,
+					thumbnail: opts.thumbnail
+				};
 
 				console.log("Inserted with ID: " + song.id);
 				resolve(song);
