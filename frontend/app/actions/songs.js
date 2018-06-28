@@ -8,7 +8,7 @@ export const ADD_SONG_SUCCESS = 'ADD_SONG_SUCCESS';
 export const ADD_SONG_ERROR = 'ADD_SONG_ERROR';
 
 // getSongs is the action for getting a list of songs.
-export const getSongs = (song) => {
+export const getSongs = (daysAgo) => {
 	return (dispatch) => {
 		// Dispatch sending action.
 		dispatch(getSongsSending(true));

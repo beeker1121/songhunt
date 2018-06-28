@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+// App imports.
+import Day from './day';
 import SongForm from './song-form';
 import { getSongs } from '../actions/songs';
 
 // mapStateToProps will map the Redux store state to our component properties.
 // The Redux store state is passed as the first parameter, which we can then
 // use to create our own object containing properties derived from the state.
-const mapStateToProps = (state) => {
-	return { songs: state.songs };
+const mapStateToProps = (state, ownProps) => {
+	return { days: state.days };
 };
 
 // mapDispatchToProps allows us to map the dispatch function of react-redux to
@@ -18,13 +20,13 @@ const mapStateToProps = (state) => {
 // action.
 const mapDispatchToProps = (dispatch) => {
 	return {
-		getSongs: (opts) => dispatch(getSongs(opts))
+		getSongs: (daysAgo) => dispatch(getSongs(daysAgo))
 	};
 };
 
-// ConnectedSongs is the songs component, which will be connected to the Redux
+// ConnectedDays is the days component, which will be connected to the Redux
 // store.
-class ConnectedSongs extends React.Component {
+class ConnectedDays extends React.Component {
 	constructor() {
 		// Get access to 'this' as subclass.
 		super();
@@ -32,34 +34,33 @@ class ConnectedSongs extends React.Component {
 
 	componentDidMount() {
 		// Get the list of songs.
-		this.props.getSongs();
+		this.props.getSongs(0);
 	}
 
 	render() {
-		const List = this.props.songs.map((song) => {
+		const List = Object.keys(this.props.days.byId).map((key) => {
 			return (
-				<div key={song.id}>
-					Title: {song.title}<br />
-					Artist: {song.artist}<br />
-				</div>
-			)
+				<Day id={key} key={key} />
+			);
 		});
 
 		return (
 			<div>
 				<SongForm />
-				<p>This will be the list of songs, total count is {this.props.songs.length}</p>
+				<p>This will be the list of days, total count is {Object.keys(this.props.days.byId).length}</p>
 				{List}
+
+				<p>'Show more' link  here</p>
 			</div>
 		);
 	}
 };
 
-ConnectedSongs.propTypes = {
-	songs: PropTypes.array.isRequired
+ConnectedDays.propTypes = {
+	days: PropTypes.object.isRequired
 };
 
-// Songs is the react-redux connected songs component.
-const Songs = connect(mapStateToProps, mapDispatchToProps)(ConnectedSongs);
+// Days is the react-redux connected days component.
+const Days = connect(mapStateToProps, mapDispatchToProps)(ConnectedDays);
 
-export default Songs;
+export default Days;
