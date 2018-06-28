@@ -1,29 +1,60 @@
+import { combineReducers } from 'redux';
+
+// App imports.
 import {
 	GET_SONGS_SENDING, GET_SONGS_SUCCESS, GET_SONGS_ERROR,
 	ADD_SONG_SENDING, ADD_SONG_SUCCESS, ADD_SONG_ERROR
 } from '../actions/songs';
 
-// initialState is the initial state for songs.
-const initialState = [];
+// handleGetSongsById handles normalizing the response of the get songs action
+// into the byId section of the songs state table.
+const handleGetSongsById = (state, action) => {
+	// Copy over state.
+	let newState = { ...state };
 
-// songs is the reducer for adding songs.
-const songs = (state = initialState, action = {}) => {
+	// Loop through each song.
+	action.songs.forEach((song) => {
+		// Add this song to state table.
+		newState[song.id] = song;
+	});
+
+	return newState;
+};
+
+// handleAddSongById handles normalizing the response of the add song action
+// into the byId section of the songs state table.
+const handleAddSongById = (state, action) => {
+	let song = action.song;
+
+	return {
+		...state,
+		[song.id]: song
+	};
+}
+
+// daysById is the reducer for the byId section of the songs state table.
+const daysById = (state = {}, action = {}) => {
 	switch (action.type) {
 		case GET_SONGS_SENDING:
 			return state;
 		case GET_SONGS_SUCCESS:
-			return [ ...state, ...action.songs ]
+			return handleGetSongsById(state, action);
 		case GET_SONGS_ERROR:
 			return state;
 		case ADD_SONG_SENDING:
 			return state;
 		case ADD_SONG_SUCCESS:
-			return [ ...state, action.song ];
+			return handleAddSongById(state, action);
 		case ADD_SONG_ERROR:
 			return state;
 		default:
 			return state;
 	}
 }
+
+// songs is the reducer for the songs state table.
+const songs = combineReducers({
+	byId: daysById
+});
 
 module.exports = songs;

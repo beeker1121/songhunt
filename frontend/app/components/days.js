@@ -38,6 +38,7 @@ class ConnectedDays extends React.Component {
 	}
 
 	render() {
+		// Loop through the days.
 		const List = Object.keys(this.props.days.byId).map((key) => {
 			return (
 				<Day id={key} key={key} />

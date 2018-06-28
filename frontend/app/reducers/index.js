@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 // App imports.
 import days from './days';
+import songs from './songs';
 
 // Redux state layout:
 //
@@ -115,5 +116,6 @@ import days from './days';
 //	songs
 //});
 export default combineReducers({
-	days: days
+	days: days,
+	songs: songs
 });

@@ -28,7 +28,7 @@ const handleGetSongsById = (state, action) => {
 		...state,
 		[nextDayId]: day
 	};
-}
+};
 
 // handleAddSongById handles normalizing the response of the add song action
 // into the byId section of the days state table.
@@ -43,7 +43,7 @@ const handleAddSongById = (state, action) => {
 			songs: [ ...state[0].songs, action.song.id ]
 		}
 	};
-}
+};
 
 // daysById is the reducer for the byId section of the days state table.
 const daysById = (state = {}, action = {}) => {
@@ -63,7 +63,7 @@ const daysById = (state = {}, action = {}) => {
 		default:
 			return state;
 	}
-}
+};
 
 // days is the reducer for the days state table.
 const days = combineReducers({
