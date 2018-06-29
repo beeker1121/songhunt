@@ -111,10 +111,6 @@ import songs from './songs';
 // the normalized state, seems much easier. Then, for a
 // comment for instance, it can pretty much just be a
 // functional component.
-//
-//export default combineReducers({
-//	songs
-//});
 export default combineReducers({
 	days: days,
 	songs: songs

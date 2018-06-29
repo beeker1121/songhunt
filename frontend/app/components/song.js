@@ -37,6 +37,7 @@ class ConnectedSong extends React.Component {
 	}
 };
 
+// Ensure prop types.
 ConnectedSong.propTypes = {
 	song: PropTypes.object.isRequired
 };

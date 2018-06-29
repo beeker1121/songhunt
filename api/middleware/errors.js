@@ -1,3 +1,4 @@
+// App imports.
 const errors = require('../errors');
 const servicesErrors = require('../../services/errors');
 
@@ -35,7 +36,6 @@ const errorHandler = (err, req, res, next) => {
 	}
 
 	// If we got here, return an internal server error.
-	res.status(500);
 	errors.defaultError(req, res,
 		new errors.APIError(500, null, "Internal server error"));
 }

@@ -25,7 +25,7 @@ const handleGet = (app, services) => {
 			response.links.next = 'http://104.197.141.188/api/songs?days_ago=' + (opts.daysAgo + 1);
 		}
 
-		// Use the songs service to get the songs.
+		// Get the songs.
 		services.songs.get(opts)
 		.then((songs) => {
 			response.data = songs;
@@ -39,8 +39,6 @@ const handleGet = (app, services) => {
 // handlePost handles POST requests to the /api/songs endpoint.
 const handlePost = (app, services) => {
 	app.post('/api/songs', (req, res, next) => {
-		console.log("Will create with title as: " + req.body.title);
-
 		// Create a new song.
 		services.songs.create({
 			userId: 1,

@@ -3,7 +3,16 @@ const getQuery = (whereClause) => {
 	return `SELECT * FROM songhunt.songs${whereClause}`;
 }
 
-const createQuery = 'INSERT INTO songhunt.songs SET user_id=?, created_at=?, title=?, artist=?, url=?, embed_url=?, thumbnail=?';
+const createQuery = `
+INSERT INTO songhunt.songs
+SET user_id=?,
+	created_at=?,
+	title=?,
+	artist=?,
+	url=?,
+	embed_url=?,
+	thumbnail=?
+`;
 
 // Database defines the songs database.
 class Database {

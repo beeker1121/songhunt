@@ -52,6 +52,8 @@ class APIErrors extends Error {
 
 // default returns a default API error response.
 //
+// @req      object   The HTTP request object.
+// @res      object   The HTTP response object.
 // @apiError APIError The API error.
 //
 // The response will be in the format of:
@@ -84,6 +86,8 @@ const defaultError = (req, res, apiError) => {
 
 // multiple returns an API error response with multiple errors.
 //
+// @req       object    The HTTP request object.
+// @res       object    The HTTP response object.
 // @apiErrors APIErrors The set of API errors.
 const multipleErrors = (req, res, apiErrors) => {
 	// Create array to hold formatted errors.
@@ -112,4 +116,9 @@ const multipleErrors = (req, res, apiErrors) => {
 	});
 }
 
-module.exports = { APIError, APIErrors, defaultError, multipleErrors };
+module.exports = {
+	APIError,
+	APIErrors,
+	defaultError,
+	multipleErrors
+};

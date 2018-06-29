@@ -34,13 +34,10 @@ export const getSongs = (daysAgo) => {
 			// Check if there was an HTTP code error
 			// (res.ok checks if 200 <= res.statusCode <= 299).
 			if (!resOk) {
-				console.log("sending errors: " + JSON.stringify(res.errors));
 				dispatch(getSongsError(res.errors));
 				return;
 			}
 
-			console.log("success");
-			console.log(JSON.stringify(res));
 			dispatch(getSongsSuccess(res.data));
 		}).catch((err) => {
 			// There was a network or some other fetch error,
@@ -117,13 +114,10 @@ export const addSong = (song) => {
 			// Check if there was an HTTP code error
 			// (res.ok checks if 200 <= res.statusCode <= 299).
 			if (!resOk) {
-				console.log("sending errors: " + JSON.stringify(res.errors));
 				dispatch(addSongError(res.errors));
 				return;
 			}
 
-			console.log("success");
-			console.log(JSON.stringify(res));
 			dispatch(addSongSuccess(res.data));
 		}).catch((err) => {
 			// There was a network or some other fetch error,

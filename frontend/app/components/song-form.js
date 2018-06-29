@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+// App imports.
 import { addSong } from '../actions/songs';
 
 // mapDispatchToProps allows us to map the dispatch function of react-redux to

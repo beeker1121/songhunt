@@ -1,3 +1,4 @@
+// App imports.
 const songs = require('./songs');
 
 module.exports = (db) => {

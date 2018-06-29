@@ -45,6 +45,7 @@ class ConnectedDay extends React.Component {
 	}
 };
 
+// Ensure prop types.
 ConnectedDay.propTypes = {
 	day: PropTypes.object.isRequired
 };

@@ -1,6 +1,6 @@
-# Song Hunter
+# Song Hunt
 
-Song Hunter is a site for finding the best music daily curated by the community.
+Song Hunt is a website for finding the best music daily, curated by the online community.
 
 ## Project Details
 

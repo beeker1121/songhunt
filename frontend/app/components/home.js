@@ -1,4 +1,6 @@
 import React from 'react';
+
+// App imports.
 import Days from './days';
 
 // Home is the application homepage.

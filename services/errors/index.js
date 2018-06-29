@@ -46,4 +46,7 @@ class OptionErrors extends Error {
 	}
 }
 
-module.exports = { OptionError, OptionErrors };
+module.exports = {
+	OptionError,
+	OptionErrors
+};

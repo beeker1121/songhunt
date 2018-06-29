@@ -1,3 +1,4 @@
+// App imports.
 const errors = require('../errors');
 
 // validateCreateOptions validates the create method options.

@@ -1,4 +1,6 @@
 import React from 'react';
+
+// App imports.
 import Header from './header';
 import Routes from '../routes';
 import '../styles/style.css';
