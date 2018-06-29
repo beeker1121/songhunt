@@ -12,12 +12,36 @@ class Database {
 	}
 
 	// get handles getting songs.
-	get(opts) {
+	get(opts = {}) {
 		return new Promise((resolve, reject) => {
 			// Create variables to hold the query fields
 			// being filtered on and their values.
 			let queryFields = '';
 			let queryValues = [];
+
+			// Handle days ago parameter.
+			if (typeof opts.daysAgo !== 'undefined') {
+				if (queryFields === '') {
+					queryFields = " WHERE created_at BETWEEN ? AND ?";
+				} else {
+					queryFields += " AND created_at BETWEEN ? AND ?";
+				}
+
+				// Create the Date objects to use in
+				// the query, set to the proper start
+				// and end datetimes.
+				let startDate = new Date();
+				let endDate = new Date();
+
+				// Set the start and end dates based
+				// on the number of days ago.
+				startDate.setDate(startDate.getDate() - opts.daysAgo);
+				startDate.setHours(0, 0, 0, 0);
+				endDate.setDate(endDate.getDate() - opts.daysAgo);
+				endDate.setHours(23, 59, 59, 999);
+
+				queryValues.push(startDate, endDate);
+			}
 
 			// Build the full query.
 			let query = getQuery(queryFields);
