@@ -32,8 +32,8 @@ const handleAddSongById = (state, action) => {
 	};
 }
 
-// daysById is the reducer for the byId section of the songs state table.
-const daysById = (state = {}, action = {}) => {
+// songsById is the reducer for the byId section of the songs state table.
+const songsById = (state = {}, action = {}) => {
 	switch (action.type) {
 		case GET_SONGS_SENDING:
 			return state;
@@ -54,7 +54,7 @@ const daysById = (state = {}, action = {}) => {
 
 // songs is the reducer for the songs state table.
 const songs = combineReducers({
-	byId: daysById
+	byId: songsById
 });
 
 module.exports = songs;

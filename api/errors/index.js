@@ -99,7 +99,7 @@ const multipleErrors = (req, res, apiErrors) => {
 
 		// If paramName is null or undefined,
 		// delete it.
-		if (typeof err.paramName === undefined || err.paramName === null)
+		if (typeof err.paramName === 'undefined' || err.paramName === null)
 			delete error.param;
 
 		errors.push(error);
