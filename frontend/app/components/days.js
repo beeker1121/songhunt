@@ -39,7 +39,7 @@ class ConnectedDays extends React.Component {
 
 	render() {
 		// Loop through the days.
-		const List = Object.keys(this.props.days.byId).map((key) => {
+		const List = this.props.days.allIds.map((key) => {
 			return (
 				<Day id={key} key={key} />
 			);
@@ -48,7 +48,7 @@ class ConnectedDays extends React.Component {
 		return (
 			<div>
 				<SongForm />
-				<p>This will be the list of days, total count is {Object.keys(this.props.days.byId).length}</p>
+				<p>This will be the list of days, total count is {this.props.days.allIds.length}</p>
 				{List}
 
 				<p>'Show more' link  here</p>

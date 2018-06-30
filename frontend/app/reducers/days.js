@@ -10,7 +10,7 @@ import {
 // into the byId section of the days state table.
 const handleGetSongsById = (state, action) => {
 	// Get the id for the next day.
-	let nextDayId = 0;
+	let nextDayId = Object.keys(state).length || 0;
 
 	// Create a 'row' for the next day.
 	let day = {
@@ -65,9 +65,40 @@ const daysById = (state = {}, action = {}) => {
 	}
 };
 
+// handleGetSongsAllIds handles normalizing the response of the get songs
+// action into the allIds section of the days state table.
+const handleGetSongsAllIds = (state, action) => {
+	// Get the id for the next day.
+	let nextDayId = state.length || 0;
+
+	// Return state with the new day id added.
+	return [ ...state, nextDayId ];
+};
+
+// daysAllIds is the reducer for the allIds section of the days state table.
+const daysAllIds = (state = [], action = {}) => {
+	switch (action.type) {
+		case GET_SONGS_SENDING:
+			return state;
+		case GET_SONGS_SUCCESS:
+			return handleGetSongsAllIds(state, action);
+		case GET_SONGS_ERROR:
+			return state;
+		case ADD_SONG_SENDING:
+			return state;
+		case ADD_SONG_SUCCESS:
+			return state;
+		case ADD_SONG_ERROR:
+			return state;
+		default:
+			return state;
+	}
+};
+
 // days is the reducer for the days state table.
 const days = combineReducers({
-	byId: daysById
+	byId: daysById,
+	allIds: daysAllIds
 });
 
 module.exports = days;

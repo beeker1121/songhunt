@@ -56,8 +56,6 @@ class Service {
 	// create handles creating a new song.
 	create(opts) {
 		return new Promise((resolve, reject) => {
-			console.log("Gonna create from service");
-
 			// Validate the options.
 			let oes = validateCreateOptions(opts);
 			if (oes)
@@ -68,8 +66,8 @@ class Service {
 			opts.thumbnail = "https://fake.thumb.soundcloud.com/";
 
 			// Create the song in the database.
-			this.db.songs.create(opts).then((song) => {
-				console.log("Successfully saved the song");
+			this.db.songs.create(opts)
+			.then((song) => {
 				resolve(song);
 			}).catch((err) => {
 				reject(err);
