@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 // App imports.
 import days from './days';
 import songs from './songs';
+import nextDayUrl from './next-day-url';
 
 // Redux state layout:
 //
@@ -40,7 +41,9 @@ import songs from './songs';
 //       }
 //     },
 //     allIds: [1]
-//   }
+//   },
+//
+//   nextDayUrl: "http://host/api/v1/songs?daysAgo=0"
 // }
 //
 // Component structure:
@@ -100,7 +103,7 @@ import songs from './songs';
 // unclear and up to developer discretion. For instance,
 // should the 'day' prop have all of the data for each song
 // within its 'songs' array, or should it just keep the ids?
-// If we just keep the ids, do we then render in
+// If we just keep the ids, do we then pull the song data in
 // mapStateToProps of the song? No, it would need the data
 // directly so we can do <Song title="" artist="" ... />.
 // Then where do we decide to pull in the comments? Should
@@ -113,5 +116,6 @@ import songs from './songs';
 // functional component.
 export default combineReducers({
 	days: days,
-	songs: songs
+	songs: songs,
+	nextDayUrl: nextDayUrl
 });

@@ -11,7 +11,10 @@ import { getSongs } from '../actions/songs';
 // The Redux store state is passed as the first parameter, which we can then
 // use to create our own object containing properties derived from the state.
 const mapStateToProps = (state, ownProps) => {
-	return { days: state.days };
+	return {
+		days: state.days,
+		nextDayUrl: state.nextDayUrl
+	};
 };
 
 // mapDispatchToProps allows us to map the dispatch function of react-redux to
@@ -20,7 +23,7 @@ const mapStateToProps = (state, ownProps) => {
 // action.
 const mapDispatchToProps = (dispatch) => {
 	return {
-		getSongs: (daysAgo) => dispatch(getSongs(daysAgo))
+		getSongs: (nextDayUrl) => dispatch(getSongs(nextDayUrl))
 	};
 };
 
@@ -30,11 +33,22 @@ class ConnectedDays extends React.Component {
 	constructor() {
 		// Get access to 'this' as subclass.
 		super();
+
+		// Set 'this' context for methods.
+		this.getSongs = this.getSongs.bind(this);
 	}
 
 	componentDidMount() {
-		// Get the list of songs.
-		this.props.getSongs(0);
+		// Get the list of songs for the first
+		// day if we haven't already.
+		if (this.props.days.allIds.length === 0)
+			this.props.getSongs(this.props.nextDayUrl);
+	}
+
+	getSongs() {
+		// Call parent getSongs method with the
+		// nextDayUrl set.
+		this.props.getSongs(this.props.nextDayUrl);
 	}
 
 	render() {
@@ -51,7 +65,8 @@ class ConnectedDays extends React.Component {
 				<p>This will be the list of days, total count is {this.props.days.allIds.length}</p>
 				{List}
 
-				<p>'Show more' link  here</p>
+				<p onClick={this.getSongs}>'Show more' link  here</p>
+				<span>Next day url: {this.props.nextDayUrl}</span>
 			</div>
 		);
 	}

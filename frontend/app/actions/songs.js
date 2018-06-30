@@ -7,8 +7,10 @@ export const ADD_SONG_SENDING = 'ADD_SONG_SENDING';
 export const ADD_SONG_SUCCESS = 'ADD_SONG_SUCCESS';
 export const ADD_SONG_ERROR = 'ADD_SONG_ERROR';
 
+export const SET_NEXT_DAY_URL = 'SET_NEXT_DAY_URL';
+
 // getSongs is the action for getting a list of songs.
-export const getSongs = (daysAgo) => {
+export const getSongs = (nextDayUrl) => {
 	return (dispatch) => {
 		// Dispatch sending action.
 		dispatch(getSongsSending(true));
@@ -19,7 +21,7 @@ export const getSongs = (daysAgo) => {
 		let resOk;
 
 		// Call the API.
-		fetch('/api/songs', {
+		fetch(nextDayUrl, {
 			method: 'GET'
 		}).then((res) => {
 			// Store the ok boolean of the response.
@@ -38,7 +40,11 @@ export const getSongs = (daysAgo) => {
 				return;
 			}
 
+			// Dispatch success action.
 			dispatch(getSongsSuccess(res.data));
+
+			// Dispatch action to update next day URL.
+			dispatch(setNextDayUrl(res.links.next));
 		}).catch((err) => {
 			// There was a network or some other fetch error,
 			// or, there was a res.json() parse error. Either
@@ -51,6 +57,7 @@ export const getSongs = (daysAgo) => {
 				}]
 			};
 
+			// Dispatch error action.
 			dispatch(getSongsError(data));
 		})
 	}
@@ -160,5 +167,14 @@ export const addSongError = (errors) => {
 	return {
 		type: ADD_SONG_ERROR,
 		errors
+	};
+}
+
+// setNextDayUrl is the action for setting the next day URL the API should call
+// to pull the next day's list of songs.
+export const setNextDayUrl = (nextDayUrl) => {
+	return {
+		type: SET_NEXT_DAY_URL,
+		nextDayUrl
 	};
 }
