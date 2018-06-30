@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"description": "Find the best music sourced daily",
 	"scripts": {
-		"build": "cp -r node_modules ../../frontend/app && cp -r ../../frontend/public dist && webpack --mode development --config webpack.config.js",
+		"build": "mkdir -p dist/public && cp -r node_modules ../../frontend/app && cp -r ../../frontend/public dist && webpack --mode development --config webpack.config.js",
 		"start": "node main.js"
 	},
 	"dependencies": {
