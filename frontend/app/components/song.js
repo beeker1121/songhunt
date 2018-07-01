@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
+import styles from '../styles/song.css';
 
 // mapStateToProps will map the Redux store state to our component properties.
 // The Redux store state is passed as the first parameter, which we can then
@@ -29,10 +30,17 @@ class ConnectedSong extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<span>Title: {this.props.song.title}</span>
-				<span>Artist: {this.props.song.artist}</span>
-				<span>Image: <img src={this.props.song.thumbnail_url} /></span>
+			<div className={styles.song}>
+				<div className={styles.header}>
+					<div className={styles.thumbnail}>
+						<img src={this.props.song.thumbnail_url} />
+					</div>
+
+					<div className={styles.info}>
+						<span className={styles.title}>{this.props.song.title}</span>
+						<span className={styles.artist}>{this.props.song.artist}</span>
+					</div>
+				</div>
 			</div>
 		);
 	}

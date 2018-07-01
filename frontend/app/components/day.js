@@ -38,7 +38,7 @@ class ConnectedDay extends React.Component {
 
 		return (
 			<div>
-				<p>This will be the list of songs, total count is {this.props.day.songs.length}</p>
+				<span className="day-header">Day {this.props.id}</span>
 				{List}
 			</div>
 		);

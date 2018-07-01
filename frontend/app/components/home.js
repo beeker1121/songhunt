@@ -2,13 +2,12 @@ import React from 'react';
 
 // App imports.
 import Days from './days';
+import styles from '../styles/home.css';
 
 // Home is the application homepage.
 const Home = () => {
 	return (
-		<div>
-			<h1>The home page</h1>
-			<h3>Days component:</h3>
+		<div className={styles.home}>
 			<Days />
 		</div>
 	);

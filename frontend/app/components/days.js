@@ -62,7 +62,6 @@ class ConnectedDays extends React.Component {
 		return (
 			<div>
 				<SongForm />
-				<p>This will be the list of days, total count is {this.props.days.allIds.length}</p>
 				{List}
 
 				<p onClick={this.getSongs}>'Show more' link  here</p>
