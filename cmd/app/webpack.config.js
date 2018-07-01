@@ -1,6 +1,3 @@
-const path = require('path');
-const fs = require('fs');
-
 module.exports = {
 	context: __dirname,
 	entry: '../../frontend/app/index.js',
