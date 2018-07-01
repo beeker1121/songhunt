@@ -10,8 +10,7 @@ SET user_id=?,
 	title=?,
 	artist=?,
 	url=?,
-	embed_url=?,
-	thumbnail=?
+	thumbnail_url=?
 `;
 
 // Database defines the songs database.
@@ -73,8 +72,7 @@ class Database {
 						title: row.title,
 						artist: row.artist,
 						url: row.url,
-						embed_url: row.embed_url,
-						thumbnail: row.thumbnail
+						thumbnail_url: row.thumbnail_url
 					};
 
 					// Append it to the songs set.
@@ -93,7 +91,7 @@ class Database {
 			let createdAt = new Date();
 
 			// Save to the database.
-			this.db.query(createQuery, [opts.userId, createdAt, opts.title, opts.artist, opts.url, opts.embedUrl, opts.thumbnail], (err, res) => {
+			this.db.query(createQuery, [opts.userId, createdAt, opts.title, opts.artist, opts.url, opts.thumbnailUrl], (err, res) => {
 				if (err)
 					return reject(err);
 
@@ -101,15 +99,13 @@ class Database {
 				let song = {
 					id: res.insertId,
 					user_id: opts.userId,
-					created_at: opts.createdAt,
+					created_at: createdAt,
 					title: opts.title,
 					artist: opts.artist,
 					url: opts.url,
-					embed_url: opts.embedUrl,
-					thumbnail: opts.thumbnail
+					thumbnail_url: opts.thumbnailUrl
 				};
 
-				console.log("Inserted with ID: " + song.id);
 				resolve(song);
 			});
 		});

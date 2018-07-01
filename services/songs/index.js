@@ -44,8 +44,12 @@ const validateCreateOptions = (opts) => {
 
 // Service defines the songs service.
 class Service {
-	constructor(db) {
+	constructor(db, sc) {
+		// The database service.
 		this.db = db || null;
+
+		// The SoundCloud API client.
+		this.sc = sc || null;
 	}
 
 	// get handles getting songs.
@@ -61,17 +65,26 @@ class Service {
 			if (oes)
 				return reject(oes);
 
-			// Get the embed and thumbnail URLs.
-			opts.embedUrl = "https://fake.embed.soundcloud.com/";
-			opts.thumbnail = "https://fake.thumb.soundcloud.com/";
+			// Get the thumbnail using the SoundCloud API.
+			this.sc.get('https://api.soundcloud.com/resolve?url=' + opts.url,
+				(err, track) => {
+					if (err) {
+						reject(new errors.SoundCloudError(err, "Sorry, SoundCloud does not allow sharing for this song!"));
+						return;
+					}
 
-			// Create the song in the database.
-			this.db.songs.create(opts)
-			.then((song) => {
-				resolve(song);
-			}).catch((err) => {
-				reject(err);
-			})
+					// Set the thumbnail URL.
+					opts.thumbnailUrl = track.artwork_url;
+
+					// Create the song in the database.
+					this.db.songs.create(opts)
+					.then((song) => {
+						resolve(song);
+					}).catch((err) => {
+						reject(err);
+					})
+				}
+			);
 		})
 	}
 }

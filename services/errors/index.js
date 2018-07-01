@@ -46,7 +46,30 @@ class OptionErrors extends Error {
 	}
 }
 
+// SoundCloudError defines SoundCloud client and API errors.
+//
+// @err     Error  The error received from the SoundCloud client.
+// @message string The error string to show.
+class SoundCloudError extends Error {
+	constructor(err, ...params) {
+		// Pass remaining params to parent constructor.
+		super(...params);
+
+		// Set the name.
+		this.name = 'SoundCloudError';
+
+		// Maintain proper stack trace (only available on V8).
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, SoundCloudError);
+		}
+
+		// Set the properties.
+		this.originalError = err;
+	}
+}
+
 module.exports = {
 	OptionError,
-	OptionErrors
+	OptionErrors,
+	SoundCloudError
 };

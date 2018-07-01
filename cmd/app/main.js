@@ -7,17 +7,29 @@ const mysql = require('mysql');
 const database = require('../../database');
 const services = require('../../services');
 const api = require('../../api');
+const config = require('../../api/config');
+
+// Third party imports.
+var soundcloud = require('node-soundcloud');
+
+// Set the configuration options from the environment.
+config.dbHost = process.env.DB_HOST || config.dbHost;
+config.dbUser = process.env.DB_USER || config.dbUser;
+config.dbPass = process.env.DB_PASS || config.dbPass;
+config.port = process.env.PORT || config.port;
+config.soundCloudClientId = process.env.SOUNDCLOUD_CLIENT_ID || config.soundCloudClientId;
 
 // Connect to the MySQL database.
 const db = mysql.createConnection({
-	host: 'localhost',
-	user: 'songhunt',
-	password: 'songhunt123'
+	host: config.dbHost,
+	user: config.dbUser,
+	password: config.dbPass
 });
 
 db.connect((err) => {
 	if (err) {
 		console.error('Could not connect to MySQL: ' + err.stack);
+		process.exit(1);
 		return;
 	}
 });
@@ -31,9 +43,18 @@ app.use(bodyParser.json());
 // Support parsing of application/x-www-form-urlencoded POST data.
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Create a new API.
+// Initialize the SoundCloud client.
+soundcloud.init({
+	id: config.soundCloudClientId
+});
+
+// Create a new database service.
 const dbServices = database(db);
-const appServices = services(dbServices);
+
+// Create a new application service.
+const appServices = services(dbServices, soundcloud);
+
+// Create a new API.
 api(app, appServices);
 
 // Handle serving public files.
@@ -47,10 +68,10 @@ app.use((req, res) => {
 });
 
 // Start the server.
-app.listen(80, (err) => {
+app.listen(config.port, (err) => {
 	if (err) {
 		console.error(err);
 	} else {
-		console.info('==> 🌎 Server is live on http://localhost:80...');
+		console.info('==> 🌎 Server is live on http://localhost:' + config.port + '...');
 	}
 });

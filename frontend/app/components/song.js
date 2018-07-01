@@ -32,6 +32,7 @@ class ConnectedSong extends React.Component {
 			<div>
 				<span>Title: {this.props.song.title}</span>
 				<span>Artist: {this.props.song.artist}</span>
+				<span>Image: <img src={this.props.song.thumbnail_url} /></span>
 			</div>
 		);
 	}
