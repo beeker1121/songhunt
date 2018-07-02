@@ -12,3 +12,20 @@ html, body {margin: 0; padding: 0; width: 100%; height: 100%; font-family: "Robo
 
 a {color: #4d87d6; text-decoration: none;}
 h1, h2, h3, h4, h5, h6 {margin: 0; padding: 0; font-weight: 600;}
+
+/* Colors */
+.red {color: #ff5033;}
+.blue {color: #4d8af6;}
+.green {color: #75b029;}
+.orange {color: #ff8f0b;}
+
+/* Labels */
+label {display: block; text-transform: uppercase;}
+
+/* Buttons */
+.sh_btn {position: relative; padding: 0px 16px 3px 16px; height: 34px; font-family: "Open Sans", sans-serif; font-weight: 600; color: #fff; background: #ff5033; border: 0; outline: 0; border-radius: 0; box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14); text-transform: uppercase; box-sizing: border-box; white-space: nowrap; cursor: pointer;}
+.sh_btn:hover {top: -1px; background: #ff5033;}
+.sh_btn:active {top: 1px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14);}
+
+/* Input */
+.sh_input {padding: 5px 8px; border: 1px solid #ccc;}

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Day from './day';
 import SongForm from './song-form';
 import { getSongs } from '../actions/songs';
+import styles from '../styles/days.css';
 
 // mapStateToProps will map the Redux store state to our component properties.
 // The Redux store state is passed as the first parameter, which we can then
@@ -60,12 +61,11 @@ class ConnectedDays extends React.Component {
 		});
 
 		return (
-			<div>
+			<div className={styles.days}>
 				<SongForm />
 				{List}
 
 				<p onClick={this.getSongs}>'Show more' link  here</p>
-				<span>Next day url: {this.props.nextDayUrl}</span>
 			</div>
 		);
 	}

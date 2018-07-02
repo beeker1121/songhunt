@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 // App imports.
 import { addSong } from '../actions/songs';
+import styles from '../styles/song_form.css';
+import gStyles from '../styles/style.css';
 
 // mapDispatchToProps allows us to map the dispatch function of react-redux to
 // our component. The dispatch function is passed as the first parameter, which
@@ -65,16 +67,27 @@ class ConnectedSongForm extends React.Component {
 
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<label htmlFor="title">Title</label>
-				<input type="text" id="title" name="title" value={this.state.title} onChange={this.handleChange} />
-				<label htmlFor="artist">Artist</label>
-				<input type="text" id="artist" name="artist" value={this.state.artist} onChange={this.handleChange} />
-				<label htmlFor="url">URL</label>
-				<input type="text" id="url" name="url" value={this.state.url} onChange={this.handleChange} />
+			<div className={styles.song_form}>
+				<h3>Post a song</h3>
 
-				<button type="submit">Add Song</button>
-			</form>
+				<form onSubmit={this.handleSubmit}>
+					<div className={styles.top}>
+						<div className={styles.top_left}>
+							<label htmlFor="title">Title</label>
+							<input type="text" id="title" name="title" className={gStyles.sh_input} value={this.state.title} onChange={this.handleChange} />
+						</div>
+						<div className={styles.top_right}>
+							<label htmlFor="artist">Artist</label>
+							<input type="text" id="artist" name="artist" className={gStyles.sh_input} value={this.state.artist} onChange={this.handleChange} />
+						</div>
+					</div>
+
+					<label htmlFor="url">URL</label>
+					<input type="text" id="url" name="url" className={`${gStyles.sh_input} ${styles.url}`} value={this.state.url} onChange={this.handleChange} />
+
+					<button type="submit" className={`${gStyles.sh_btn} ${styles.btn}`}>Add Song</button>
+				</form>
+			</div>
 		);
 	}
 }

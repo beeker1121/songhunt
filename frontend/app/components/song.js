@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
+import SongDetail from './song-detail';
 import styles from '../styles/song.css';
 
 // mapStateToProps will map the Redux store state to our component properties.
@@ -26,12 +27,26 @@ class ConnectedSong extends React.Component {
 	constructor() {
 		// Get access to 'this' as subclass.
 		super();
+
+		this.showHideDetail = this.showHideDetail.bind(this);
+
+		this.state = {
+			showDetail: false
+		};
+	}
+
+	showHideDetail() {
+		let newState = {
+			showDetail: !this.state.showDetail
+		};
+
+		this.setState(newState);
 	}
 
 	render() {
 		return (
 			<div className={styles.song}>
-				<div className={styles.header}>
+				<div className={styles.header} onClick={this.showHideDetail}>
 					<div className={styles.thumbnail}>
 						<img src={this.props.song.thumbnail_url} />
 					</div>
@@ -40,7 +55,15 @@ class ConnectedSong extends React.Component {
 						<span className={styles.title}>{this.props.song.title}</span>
 						<span className={styles.artist}>{this.props.song.artist}</span>
 					</div>
+
+					<div className={styles.upvotes}>
+						<div className={styles.arrow}></div>
+						<span>123</span>
+					</div>
 				</div>
+				{this.state.showDetail &&
+				<SongDetail id={this.props.song.id} />
+				}
 			</div>
 		);
 	}

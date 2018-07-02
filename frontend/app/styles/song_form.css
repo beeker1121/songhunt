@@ -1,0 +1,13 @@
+.song_form {margin: 0 0 24px 0; padding: 12px; width: 100%; background: #fff7d8; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);}
+.song_form h3 {margin: 0 0 12px 0; font-size: 20px; font-weight: 500; text-transform: uppercase;}
+
+.top {display: table; width: 100%;}
+
+.top_left {display: table-cell; padding: 0 4px 0 0; width: 50%;}
+.top_left input {width: 100%;}
+.top_right {display: table-cell; width: 50%;}
+.top_right input {margin: 0 0 4px 0; width: 100%;}
+
+.url {width: 100%;}
+
+.btn {margin: 12px 0 0 0;}
