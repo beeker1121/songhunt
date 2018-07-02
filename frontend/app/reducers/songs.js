@@ -3,7 +3,8 @@ import { combineReducers } from 'redux';
 // App imports.
 import {
 	GET_SONGS_SENDING, GET_SONGS_SUCCESS, GET_SONGS_ERROR,
-	ADD_SONG_SENDING, ADD_SONG_SUCCESS, ADD_SONG_ERROR
+	ADD_SONG_SENDING, ADD_SONG_SUCCESS, ADD_SONG_ERROR,
+	GET_SONG_EMBED_HTML_SUCCESS, GET_SONG_EMBED_HTML_ERROR
 } from '../actions/songs';
 
 // handleGetSongsById handles normalizing the response of the get songs action
@@ -14,6 +15,11 @@ const handleGetSongsById = (state, action) => {
 
 	// Loop through each song.
 	action.songs.forEach((song) => {
+		// Add the embedHtml and embedHtmlError
+		// properties to the song object.
+		song.embedHtml = '';
+		song.embedHtmlError = '';
+
 		// Add this song to the state table.
 		newState[song.id] = song;
 	});
@@ -26,9 +32,46 @@ const handleGetSongsById = (state, action) => {
 const handleAddSongById = (state, action) => {
 	let song = action.song;
 
+	// Add the embedHtml and embedHtmlError
+	// properties to the song object.
+	song.embedHtml = '';
+	song.embedHtmlError = '';
+
 	return {
 		...state,
 		[song.id]: song
+	};
+}
+
+// handleGetSongEmbedHtmlSuccessById handles normalizing the response of the
+// get song embed html success action into the byId section of the songs table.
+const handleGetSongEmbedHtmlSuccessById = (state, action) => {
+	// Pull a copy of the song from state.
+	let song = { ...state[action.id] };
+
+	// Update the embedHtml and embedHtmlError properties.
+	song.embedHtml = action.embedHtml;
+	song.embedHtmlError = '';
+
+	return {
+		...state,
+		[action.id]: song
+	};
+}
+
+// handleGetSongEmbedHtmlErrorById handles normalizing the response of the get
+// song embed html error action into the byId section of the songs table.
+const handleGetSongEmbedHtmlErrorById = (state, action) => {
+	// Pull a copy of the song from state.
+	let song = { ...state[action.id] };
+
+	// Update the embedHtml and embedHtmlError properties.
+	song.embedHtml = '';
+	song.embedHtmlError = action.embedHtmlError;
+
+	return {
+		...state,
+		[action.id]: song
 	};
 }
 
@@ -47,6 +90,10 @@ const songsById = (state = {}, action = {}) => {
 			return handleAddSongById(state, action);
 		case ADD_SONG_ERROR:
 			return state;
+		case GET_SONG_EMBED_HTML_SUCCESS:
+			return handleGetSongEmbedHtmlSuccessById(state, action);
+		case GET_SONG_EMBED_HTML_ERROR:
+			return handleGetSongEmbedHtmlErrorById(state, action);
 		default:
 			return state;
 	}

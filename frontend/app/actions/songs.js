@@ -7,6 +7,9 @@ export const ADD_SONG_SENDING = 'ADD_SONG_SENDING';
 export const ADD_SONG_SUCCESS = 'ADD_SONG_SUCCESS';
 export const ADD_SONG_ERROR = 'ADD_SONG_ERROR';
 
+export const GET_SONG_EMBED_HTML_SUCCESS = 'GET_SONG_EMBED_HTML_SUCCESS';
+export const GET_SONG_EMBED_HTML_ERROR = 'GET_SONG_EMBED_HTML_ERROR';
+
 export const SET_NEXT_DAY_URL = 'SET_NEXT_DAY_URL';
 
 // getSongs is the action for getting a list of songs.
@@ -59,7 +62,7 @@ export const getSongs = (nextDayUrl) => {
 
 			// Dispatch error action.
 			dispatch(getSongsError(data));
-		})
+		});
 	}
 }
 
@@ -139,7 +142,7 @@ export const addSong = (song) => {
 			};
 
 			dispatch(addSongError(data));
-		})
+		});
 	}
 }
 
@@ -167,6 +170,72 @@ export const addSongError = (errors) => {
 	return {
 		type: ADD_SONG_ERROR,
 		errors
+	};
+}
+
+// getSongEmbedHtml is the action for getting the embed HTML of a song.
+export const getSongEmbedHtml = (id, songUrl) => {
+	return (dispatch) => {
+		// Set the URL to call.
+		let url = 'https://soundcloud.com/oembed?format=json&maxwidth=480&maxheight=140&url=' + songUrl;
+
+		// Create separate variable outside of fetch scope
+		// to store response.ok boolean, since we don't want
+		// to get into Promise-land hell.
+		let resOk;
+
+		// Call the API.
+		fetch(url, {
+			method: 'GET'
+		}).then((res) => {
+			// Store the ok boolean of the response.
+			resOk = res.ok;
+
+			// Parse response body as JSON.
+			//
+			// We use a promise here since the .json() method reads
+			// in the response body in a returned Promise.
+			return res.json();
+		}).then((res) => {
+			// Check if there was an HTTP code error
+			// (res.ok checks if 200 <= res.statusCode <= 299).
+			if (!resOk) {
+				dispatch(getSongEmbedHtmlError({
+					id: id,
+					embedHtmlError: 'Could not load embedded player for this song'
+				}));
+				return;
+			}
+
+			// Dispatch success action.
+			dispatch(getSongEmbedHtmlSuccess({
+				id: id,
+				embedHtml: res.html
+			}));
+		}).catch((err) => {
+			dispatch(getSongEmbedHtmlError({
+				id: id,
+				embedHtmlError: 'Could not load embedded player for this song'
+			}));
+		});
+	}
+}
+
+// getSongEmbedHtmlSuccess is the action for signaling the embed HTML for a
+// song has been successfully requested.
+export const getSongEmbedHtmlSuccess = (data) => {
+	return {
+		type: GET_SONG_EMBED_HTML_SUCCESS,
+		...data
+	};
+}
+
+// getSongEmbedHtmlError is the action for signaling an error was encountered
+// while requesting the embed HTML for a song.
+export const getSongEmbedHtmlError = (data) => {
+	return {
+		type: GET_SONG_EMBED_HTML_ERROR,
+		...data
 	};
 }
 
