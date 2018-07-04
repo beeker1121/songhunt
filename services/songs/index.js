@@ -69,7 +69,7 @@ class Service {
 			this.sc.get('https://api.soundcloud.com/resolve?url=' + opts.url,
 				(err, track) => {
 					if (err) {
-						reject(new errors.SoundCloudError(err, "Sorry, SoundCloud does not allow sharing for this song!"));
+						reject(new errors.SoundCloudError(err, 'url', 'SoundCloud does not allow sharing for this song!'));
 						return;
 					}
 

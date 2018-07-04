@@ -120,15 +120,14 @@ class ConnectedSongForm extends React.Component {
 			// There was a network or some other fetch error,
 			// or, there was a res.json() parse error. Either
 			// way, wrap it in the expected error response
-			// format and return an internal server error.
-			let data = {
-				errors: [{
-					status: 500,
-					detail: "Internal server error"
-				}]
-			};
-
-			console.log('Set error state here as well');
+			// format set to the url parameter.
+			this.setState({
+				...this.state,
+				errors: {
+					...this.state.errors,
+					url: 'Internal server error'
+				}
+			});
 		});
 	}
 

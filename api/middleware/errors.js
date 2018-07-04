@@ -39,7 +39,7 @@ const errorHandler = (err, req, res, next) => {
 	if (err instanceof servicesErrors.SoundCloudError) {
 		// Create a new APIError with the status code
 		// set to 400 (bad request).
-		let apiError = new errors.APIError(400, null, err.message);
+		let apiError = new errors.APIError(400, err.optionName, err.message);
 		errors.defaultError(req, res, apiError);
 		return;
 	}
