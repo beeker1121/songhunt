@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
-import { addSong } from '../actions/songs';
+import { addSongSuccess } from '../actions/songs';
 import styles from '../styles/song_form.css';
 import gStyles from '../styles/style.css';
 
@@ -13,7 +13,7 @@ import gStyles from '../styles/style.css';
 // action.
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addSong: (song) => dispatch(addSong(song))
+		addSongSuccess: (song) => dispatch(addSongSuccess(song))
 	};
 };
 
@@ -28,7 +28,12 @@ class ConnectedSongForm extends React.Component {
 		this.state = {
 			title: '',
 			artist: '',
-			url: ''
+			url: '',
+			errors: {
+				title: '',
+				artist: '',
+				url: ''
+			}
 		};
 
 		// Set 'this' scope to this class for methods.
@@ -54,14 +59,76 @@ class ConnectedSongForm extends React.Component {
 		event.preventDefault();
 
 		// Add the song.
-		const song = this.state;
-		this.props.addSong(song);
+		let song = { ...this.state };
 
-		// Reset state.
-		this.setState({
-			title: '',
-			artist: '',
-			url: ''
+		// Dispatch sending action.
+		//dispatch(addSongSending(true));
+
+		// Create separate variable outside of fetch scope
+		// to store response.ok boolean, since we don't want
+		// to get into Promise-land hell.
+		let resOk;
+		let resStatusCode;
+
+		// Call the API.
+		fetch('/api/songs', {
+			method: 'POST',
+			body: JSON.stringify(song),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then((res) => {
+			// Store the ok boolean of the response.
+			resOk = res.ok;
+			resStatusCode = res.status;
+
+			// Parse response body as JSON.
+			//
+			// We use a promise here since the .json() method reads
+			// in the response body in a returned Promise.
+			return res.json();
+		}).then((res) => {
+			// Check if there was an HTTP code error
+			// (res.ok checks if 200 <= res.statusCode <= 299).
+			if (!resOk) {
+				// Create a copy of the state.
+				let newState = { ...this.state };
+
+				// If response is a 400 Bad Request.
+				if (resStatusCode === 400) {
+					// Loop through the errors and add to state.
+					res.errors.forEach((err) => {
+						newState.errors[err.param] = err.detail;
+					});
+				}
+
+				this.setState(newState);
+				return;
+			}
+
+			// Dispatch success action.
+			this.props.addSongSuccess(res.data);
+
+			// Reset state.
+			this.setState({
+				...this.state,
+				title: '',
+				artist: '',
+				url: ''
+			});
+		}).catch((err) => {
+			// There was a network or some other fetch error,
+			// or, there was a res.json() parse error. Either
+			// way, wrap it in the expected error response
+			// format and return an internal server error.
+			let data = {
+				errors: [{
+					status: 500,
+					detail: "Internal server error"
+				}]
+			};
+
+			console.log('Set error state here as well');
 		});
 	}
 
@@ -75,15 +142,24 @@ class ConnectedSongForm extends React.Component {
 						<div className={styles.top_left}>
 							<label htmlFor="title">Title</label>
 							<input type="text" id="title" name="title" className={gStyles.sh_input} value={this.state.title} onChange={this.handleChange} />
+							{this.state.errors.title !== '' &&
+								<span className={gStyles.param_error}>{this.state.errors.title}</span>
+							}
 						</div>
 						<div className={styles.top_right}>
 							<label htmlFor="artist">Artist</label>
 							<input type="text" id="artist" name="artist" className={gStyles.sh_input} value={this.state.artist} onChange={this.handleChange} />
+							{this.state.errors.artist !== '' &&
+								<span className={gStyles.param_error}>{this.state.errors.artist}</span>
+							}
 						</div>
 					</div>
 
 					<label htmlFor="url">URL</label>
 					<input type="text" id="url" name="url" className={`${gStyles.sh_input} ${styles.url}`} value={this.state.url} onChange={this.handleChange} />
+					{this.state.errors.url !== '' &&
+						<span className={gStyles.param_error}>{this.state.errors.url}</span>
+					}
 
 					<button type="submit" className={`${gStyles.sh_btn} ${styles.btn}`}>Add Song</button>
 				</form>
@@ -94,7 +170,7 @@ class ConnectedSongForm extends React.Component {
 
 // Ensure prop types.
 ConnectedSongForm.propTypes = {
-	addSong: PropTypes.func.isRequired
+	addSongSuccess: PropTypes.func.isRequired
 };
 
 // SongForm is the react-redux connected song form component.

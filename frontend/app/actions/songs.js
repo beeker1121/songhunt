@@ -93,59 +93,6 @@ export const getSongsError = (errors) => {
 	};
 }
 
-// addSong is the action for adding a new song.
-export const addSong = (song) => {
-	return (dispatch) => {
-		// Dispatch sending action.
-		dispatch(addSongSending(true));
-
-		// Create separate variable outside of fetch scope
-		// to store response.ok boolean, since we don't want
-		// to get into Promise-land hell.
-		let resOk;
-
-		// Call the API.
-		fetch('/api/songs', {
-			method: 'POST',
-			body: JSON.stringify(song),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then((res) => {
-			// Store the ok boolean of the response.
-			resOk = res.ok;
-
-			// Parse response body as JSON.
-			//
-			// We use a promise here since the .json() method reads
-			// in the response body in a returned Promise.
-			return res.json();
-		}).then((res) => {
-			// Check if there was an HTTP code error
-			// (res.ok checks if 200 <= res.statusCode <= 299).
-			if (!resOk) {
-				dispatch(addSongError(res.errors));
-				return;
-			}
-
-			dispatch(addSongSuccess(res.data));
-		}).catch((err) => {
-			// There was a network or some other fetch error,
-			// or, there was a res.json() parse error. Either
-			// way, wrap it in the expected error response
-			// format and return an internal server error.
-			let data = {
-				errors: [{
-					status: 500,
-					detail: "Internal server error"
-				}]
-			};
-
-			dispatch(addSongError(data));
-		});
-	}
-}
-
 // addSongSending is the action for signaling a new song is being sent to the
 // API.
 export const addSongSending = (bool) => {
@@ -173,69 +120,13 @@ export const addSongError = (errors) => {
 	};
 }
 
-// getSongEmbedHtml is the action for getting the embed HTML of a song.
-export const getSongEmbedHtml = (id, songUrl) => {
-	return (dispatch) => {
-		// Set the URL to call.
-		let url = 'https://soundcloud.com/oembed?format=json&maxwidth=480&maxheight=140&url=' + songUrl;
-
-		// Create separate variable outside of fetch scope
-		// to store response.ok boolean, since we don't want
-		// to get into Promise-land hell.
-		let resOk;
-
-		// Call the API.
-		fetch(url, {
-			method: 'GET'
-		}).then((res) => {
-			// Store the ok boolean of the response.
-			resOk = res.ok;
-
-			// Parse response body as JSON.
-			//
-			// We use a promise here since the .json() method reads
-			// in the response body in a returned Promise.
-			return res.json();
-		}).then((res) => {
-			// Check if there was an HTTP code error
-			// (res.ok checks if 200 <= res.statusCode <= 299).
-			if (!resOk) {
-				dispatch(getSongEmbedHtmlError({
-					id: id,
-					embedHtmlError: 'Could not load embedded player for this song'
-				}));
-				return;
-			}
-
-			// Dispatch success action.
-			dispatch(getSongEmbedHtmlSuccess({
-				id: id,
-				embedHtml: res.html
-			}));
-		}).catch((err) => {
-			dispatch(getSongEmbedHtmlError({
-				id: id,
-				embedHtmlError: 'Could not load embedded player for this song'
-			}));
-		});
-	}
-}
-
 // getSongEmbedHtmlSuccess is the action for signaling the embed HTML for a
 // song has been successfully requested.
-export const getSongEmbedHtmlSuccess = (data) => {
+export const getSongEmbedHtmlSuccess = (id, embedHtml) => {
 	return {
 		type: GET_SONG_EMBED_HTML_SUCCESS,
-		...data
-	};
-}
-
-// getSongEmbedHtmlError is the action for signaling an error was encountered
-// while requesting the embed HTML for a song.
-export const getSongEmbedHtmlError = (data) => {
-	return {
-		type: GET_SONG_EMBED_HTML_ERROR,
-		...data
+		id,
+		embedHtml
 	};
 }
 

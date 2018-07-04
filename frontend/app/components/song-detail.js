@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
-import { getSongEmbedHtml } from '../actions/songs';
+import { getSongEmbedHtmlSuccess } from '../actions/songs';
 import styles from '../styles/song_detail.css';
 
 // mapStateToProps will map the Redux store state to our component properties.
@@ -19,7 +19,7 @@ const mapStateToProps = (state, ownProps) => {
 // action.
 const mapDispatchToProps = (dispatch) => {
 	return {
-		getSongEmbedHtml: (id, songUrl) => dispatch(getSongEmbedHtml(id, songUrl))
+		getSongEmbedHtmlSuccess: (id, embedHtml) => dispatch(getSongEmbedHtmlSuccess(id, embedHtml))
 	};
 };
 
@@ -29,17 +29,60 @@ class ConnectedSongDetail extends React.Component {
 	constructor() {
 		// Get access to 'this' as subclass.
 		super();
+
+		this.state = {
+			embedHtmlError: ''
+		};
+
+		// Set 'this' scope to this class for methods.
+		this.getSongEmbedHtml = this.getSongEmbedHtml.bind(this);
 	}
 
 	componentDidMount() {
 		// If we have not yet obtained the embed
 		// HTML for this song.
-		if (this.props.song.embedHtml === '' &&
-			this.props.song.embedHtmlError === '')
-			this.props.getSongEmbedHtml(
-				this.props.song.id,
-				this.props.song.url
-			);
+		if (this.props.song.embedHtml === '')
+			this.getSongEmbedHtml();
+	}
+
+	getSongEmbedHtml() {
+		// Set the URL to call.
+		let url = 'https://soundcloud.com/oembed?format=json&maxwidth=480&maxheight=140&url=' + this.props.song.url;
+
+		// Create separate variable outside of fetch scope
+		// to store response.ok boolean, since we don't want
+		// to get into Promise-land hell.
+		let resOk;
+
+		// Call the API.
+		fetch(url, {
+			method: 'GET'
+		}).then((res) => {
+			// Store the ok boolean of the response.
+			resOk = res.ok;
+
+			// Parse response body as JSON.
+			//
+			// We use a promise here since the .json() method reads
+			// in the response body in a returned Promise.
+			return res.json();
+		}).then((res) => {
+			// Check if there was an HTTP code error
+			// (res.ok checks if 200 <= res.statusCode <= 299).
+			if (!resOk) {
+				this.setState({
+					embedHtmlError: 'Could not load embedded player for this song'
+				});
+				return;
+			}
+
+			// Dispatch success action.
+			this.props.getSongEmbedHtmlSuccess(this.props.song.id, res.html);
+		}).catch((err) => {
+			this.setState({
+				embedHtmlError: 'Could not load embedded player for this song'
+			});
+		});
 	}
 
 	render() {
@@ -47,10 +90,10 @@ class ConnectedSongDetail extends React.Component {
 		let Embed;
 
 		// If there was an error trying to get the embed HTML.
-		if (this.props.song.embedHtmlError !== '')
+		if (this.state.embedHtmlError !== '')
 			Embed = () => {
 				return(
-					<div className={styles.embed}>{this.props.song.embedHtmlError}</div>
+					<div className={styles.embed}>{this.state.embedHtmlError}</div>
 				);
 			};
 		else
@@ -70,7 +113,8 @@ class ConnectedSongDetail extends React.Component {
 
 // Ensure prop types.
 ConnectedSongDetail.propTypes = {
-	song: PropTypes.object.isRequired
+	song: PropTypes.object.isRequired,
+	getSongEmbedHtmlSuccess: PropTypes.func.isRequired
 };
 
 // SongDetail is the react-redux connected song detail component.

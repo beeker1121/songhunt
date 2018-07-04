@@ -73,7 +73,8 @@ class ConnectedDays extends React.Component {
 
 // Ensure prop types.
 ConnectedDays.propTypes = {
-	days: PropTypes.object.isRequired
+	days: PropTypes.object.isRequired,
+	nextDayUrl: PropTypes.string.isRequired
 };
 
 // Days is the react-redux connected days component.
