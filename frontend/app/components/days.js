@@ -65,7 +65,7 @@ class ConnectedDays extends React.Component {
 				<SongForm />
 				{List}
 
-				<p onClick={this.getSongs}>'Show more' link  here</p>
+				<div className={styles.show_more}><span onClick={this.getSongs}>Load more...</span></div>
 			</div>
 		);
 	}

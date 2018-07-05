@@ -59,10 +59,17 @@ class ConnectedDay extends React.Component {
 			);
 		});
 
+		// Create placeholder for no songs.
+		const NoSongs = (() => {
+			return (
+				<span className={styles.no_songs}>No songs for today :( You should sign up and add one!</span>
+			);
+		})();
+
 		return (
 			<div>
 				<DayHeader />
-				{List}
+				{this.props.day.songs.length > 0 ? List : NoSongs}
 			</div>
 		);
 	}

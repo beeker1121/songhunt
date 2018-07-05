@@ -134,8 +134,6 @@ class ConnectedSongForm extends React.Component {
 	render() {
 		return (
 			<div className={styles.song_form}>
-				<h3>Post a song</h3>
-
 				<form onSubmit={this.handleSubmit}>
 					<div className={styles.top}>
 						<div className={styles.top_left}>
