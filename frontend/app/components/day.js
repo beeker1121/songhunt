@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 // App imports.
 import Song from './song';
+import styles from '../styles/day.css';
 
 // mapStateToProps will map the Redux store state to our component properties.
 // The Redux store state is passed as the first parameter, which we can then
@@ -29,6 +30,28 @@ class ConnectedDay extends React.Component {
 	}
 
 	render() {
+		// Handle the day header.
+		let DayHeader;
+
+		if (this.props.id === 0)
+			DayHeader = () => {
+				return (
+					<span className={styles.header}>Today</span>
+				);
+			};
+		else if (this.props.id === 1)
+			DayHeader = () => {
+				return (
+					<span className={styles.header}>Yesterday</span>
+				);
+			};
+		else
+			DayHeader = () => {
+				return (
+					<span className={styles.header}>{this.props.id} Days Ago</span>
+				);
+			};
+
 		// Loop through the songs.
 		const List = this.props.day.songs.map((songId) => {
 			return (
@@ -38,7 +61,7 @@ class ConnectedDay extends React.Component {
 
 		return (
 			<div>
-				<span className="day-header">Day {this.props.id}</span>
+				<DayHeader />
 				{List}
 			</div>
 		);
