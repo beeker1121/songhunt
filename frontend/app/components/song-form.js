@@ -61,9 +61,6 @@ class ConnectedSongForm extends React.Component {
 		// Add the song.
 		let song = { ...this.state };
 
-		// Dispatch sending action.
-		//dispatch(addSongSending(true));
-
 		// Create separate variable outside of fetch scope
 		// to store response.ok boolean, since we don't want
 		// to get into Promise-land hell.

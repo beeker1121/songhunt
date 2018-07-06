@@ -34,7 +34,7 @@ const handleGet = (app, services) => {
 			next(err);
 		});
 	});
-}
+};
 
 // handlePost handles POST requests to the /api/songs endpoint.
 const handlePost = (app, services) => {
@@ -51,10 +51,10 @@ const handlePost = (app, services) => {
 			next(err);
 		});
 	});
-}
+};
 
 module.exports = (app, services) => {
 	// Create the routes.
 	handleGet(app, services);
 	handlePost(app, services);
-}
+};

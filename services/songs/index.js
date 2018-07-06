@@ -40,7 +40,7 @@ const validateCreateOptions = (opts) => {
 	}
 
 	return;
-}
+};
 
 // Service defines the songs service.
 class Service {
@@ -82,10 +82,10 @@ class Service {
 						resolve(song);
 					}).catch((err) => {
 						reject(err);
-					})
+					});
 				}
 			);
-		})
+		});
 	}
 }
 

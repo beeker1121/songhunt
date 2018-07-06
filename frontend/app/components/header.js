@@ -9,10 +9,11 @@ const Header = () => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.header}>
-				<div className={styles.logo}><a href="/">Song Hunt</a></div>
+				<div className={styles.logo}><Link to='/'>Song Hunt</Link></div>
 
 				<ul className={styles.nav}>
 					<li><Link to='/about'>About</Link></li>
+					<li><Link to='/signup'>Sign Up</Link></li>
 				</ul>
 			</div>
 		</div>

@@ -35,6 +35,15 @@ const errorHandler = (err, req, res, next) => {
 		return;
 	}
 
+	// If this is a OptionError error class.
+	if (err instanceof servicesErrors.OptionError) {
+		// Create a new APIError with the status code
+		// set to 400 (bad request).
+		let apiError = new errors.APIError(400, err.optionName, err.message);
+		errors.defaultError(req, res, apiError);
+		return;
+	}
+
 	// If this is a SoundCloudError error class.
 	if (err instanceof servicesErrors.SoundCloudError) {
 		// Create a new APIError with the status code
