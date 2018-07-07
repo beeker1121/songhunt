@@ -55,6 +55,42 @@ const validateCreateOptions = (opts) => {
 	return;
 };
 
+// validateLoginOptions validates the login method options.
+const validateLoginOptions = (opts) => {
+	// Set opts default value to an empty object
+	// if necessary, so we can check if properties
+	// exist on it.
+	opts = opts || {};
+
+	// Create new OptionErrors to handle any
+	// option validation errors.
+	var oes = new errors.OptionErrors();
+
+	// Validate the options.
+	if (typeof opts.email === 'undefined' || opts.email === null)
+		oes.add(new errors.OptionError('email', 'an email address is required'));
+	else if (typeof opts.email !== 'string')
+		oes.add(new errors.OptionError('email', 'email must be a string'));
+	else if (opts.email === '')
+		oes.add(new errors.OptionError('email', 'email cannot be empty'));
+	else if (!validateEmail(opts.email))
+		oes.add(new errors.OptionError('email', 'email format is invalid'));
+
+	if (typeof opts.password === 'undefined' || opts.password === null)
+		oes.add(new errors.OptionError('password', 'password cannot be empty'));
+	else if (typeof opts.password !== 'string')
+		oes.add(new errors.OptionError('password', 'password must be a string'));
+	else if (opts.password === '')
+		oes.add(new errors.OptionError('password', 'password cannot be empty'));
+
+	// Return if there are option errors.
+	if (oes.errors.length > 0) {
+		return oes;
+	}
+
+	return;
+};
+
 // Service defines the users service.
 class Service {
 	constructor(db) {
@@ -89,6 +125,32 @@ class Service {
 				}).catch((err) => {
 					reject(err);
 				});
+			}).catch((err) => {
+				reject(err);
+			});
+		});
+	}
+
+	// login handles logging a member in.
+	login(opts) {
+		return new Promise((resolve, reject) => {
+			// Validate the options.
+			let oes = validateLoginOptions(opts);
+			if (oes)
+				return reject(oes);
+
+			// Check if the email already exists in the database.
+			this.db.users.getByEmail(opts.email)
+			.then((user) => {
+				if (!user)
+					return reject(new errors.OptionError('email', 'Email and/or password is invalid'));
+
+				// Verify password with bcrypt.
+				if (!bcrypt.compareSync(opts.password, user.password))
+					return reject(new errors.OptionError('email', 'Email and/or password is invalid'));
+
+				// Return the user.
+				resolve(user);
 			}).catch((err) => {
 				reject(err);
 			});

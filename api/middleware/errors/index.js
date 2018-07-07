@@ -1,6 +1,7 @@
 // App imports.
-const errors = require('../errors');
-const servicesErrors = require('../../services/errors');
+const errors = require('../../errors');
+const AuthorizationError = require('../auth/errors');
+const servicesErrors = require('../../../services/errors');
 
 // errorHandler is middleware for handling API errors.
 //
@@ -16,6 +17,15 @@ const errorHandler = (err, req, res, next) => {
 	// If this is an APIErrors error class.
 	if (err instanceof errors.APIErrors) {
 		errors.multipleErrors(req, res, err);
+		return;
+	}
+
+	// If this is a AuthorizationError error class.
+	if (err instanceof AuthorizationError) {
+		// Create a new APIError with the status code
+		// set to 401 (Unauthorized).
+		let apiError = new errors.APIError(401, null, err.message);
+		errors.defaultError(req, res, apiError);
 		return;
 	}
 
@@ -60,6 +70,6 @@ const errorHandler = (err, req, res, next) => {
 
 	errors.defaultError(req, res,
 		new errors.APIError(500, null, "Internal server error"));
-}
+};
 
 module.exports = errorHandler;

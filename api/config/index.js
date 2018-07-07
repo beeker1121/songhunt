@@ -1,9 +1,10 @@
 var config = {
-	dbHost: "localhost",
-	dbUser: "",
-	dbPass: "",
+	dbHost: 'localhost',
+	dbUser: '',
+	dbPass: '',
 	port: 80,
-	soundCloudClientId: ""
+	jwtSecret: '',
+	soundCloudClientId: ''
 };
 
 module.exports = config;

@@ -18,7 +18,7 @@ class OptionError extends Error {
 		// Set the properties.
 		this.optionName = optionName;
 	}
-}
+};
 
 // OptionErrors defines a set of option errors.
 //
@@ -44,7 +44,7 @@ class OptionErrors extends Error {
 	add(optionError) {
 		this.errors.push(optionError);
 	}
-}
+};
 
 // SoundCloudError defines SoundCloud client and API errors.
 //
@@ -68,7 +68,7 @@ class SoundCloudError extends Error {
 		this.originalError = err;
 		this.optionName = optionName;
 	}
-}
+};
 
 module.exports = {
 	OptionError,

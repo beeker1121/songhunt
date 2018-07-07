@@ -17,6 +17,7 @@ config.dbHost = process.env.DB_HOST || config.dbHost;
 config.dbUser = process.env.DB_USER || config.dbUser;
 config.dbPass = process.env.DB_PASS || config.dbPass;
 config.port = process.env.PORT || config.port;
+config.jwtSecret = process.env.JWT_SECRET || config.jwtSecret;
 config.soundCloudClientId = process.env.SOUNDCLOUD_CLIENT_ID || config.soundCloudClientId;
 
 // Connect to the MySQL database.
