@@ -13,6 +13,7 @@ const Header = () => {
 
 				<ul className={styles.nav}>
 					<li><Link to='/about'>About</Link></li>
+					<li><Link to='/login'>Log In</Link></li>
 					<li><Link to='/signup'>Sign Up</Link></li>
 				</ul>
 			</div>
