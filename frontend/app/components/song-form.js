@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -107,6 +108,10 @@ class ConnectedSongForm extends React.Component {
 					res.errors.forEach((err) => {
 						newState.errors[err.param] = err.detail;
 					});
+				} else if (resStatusCode === 401) {
+					// Redirect to log in page.
+					this.props.history.push('/login');
+					return;
 				}
 
 				this.setState(newState);
@@ -180,4 +185,4 @@ ConnectedSongForm.propTypes = {
 // SongForm is the react-redux connected song form component.
 const SongForm = connect(mapStateToProps, mapDispatchToProps)(ConnectedSongForm);
 
-export default SongForm;
+export default withRouter(SongForm);
