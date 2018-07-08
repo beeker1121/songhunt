@@ -11,6 +11,6 @@ const nextDayUrl = (state = "http://104.197.141.188/api/songs?days_ago=0", actio
 		default:
 			return state;
 	}
-}
+};
 
 module.exports = nextDayUrl;

@@ -1,8 +1,10 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
+import { userLoggedIn } from '../actions/user';
 import styles from '../styles/log_in.css';
 import gStyles from '../styles/style.css';
 
@@ -18,7 +20,9 @@ const mapStateToProps = (state, ownProps) => {
 // we can then use to create our own object with functions using the required
 // action.
 const mapDispatchToProps = (dispatch) => {
-	return {};
+	return {
+		userLoggedIn: (token) => dispatch(userLoggedIn(token))
+	};
 };
 
 // ConnectedLogIn is the log in page component, which will be connected to
@@ -35,7 +39,8 @@ class ConnectedLogIn extends React.Component {
 			errors: {
 				email: '',
 				password: ''
-			}
+			},
+			loggedIn: false
 		};
 
 		// Set 'this' scope to this class for methods.
@@ -108,13 +113,15 @@ class ConnectedLogIn extends React.Component {
 			}
 
 			// Dispatch success action.
-			//this.props.logInSuccess(res.data);
+			this.props.userLoggedIn(res.data.token);
 
-			// Reset state.
+			// Reset state and signal user is
+			// logged in for redirect.
 			this.setState({
 				...this.state,
 				email: '',
-				password: ''
+				password: '',
+				loggedIn: true
 			});
 		}).catch((err) => {
 			// There was a network or some other fetch error,
@@ -150,6 +157,8 @@ class ConnectedLogIn extends React.Component {
 					}
 
 					<button type="submit" className={`${gStyles.sh_btn} ${styles.btn}`}>Log In</button>
+
+					{this.state.loggedIn ? <Redirect to="/" /> : null}
 				</form>
 			</div>
 		);

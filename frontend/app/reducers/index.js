@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 import days from './days';
 import songs from './songs';
 import nextDayUrl from './next-day-url';
+import currentUser from './current-user';
 
 // Redux state layout:
 //
@@ -43,7 +44,11 @@ import nextDayUrl from './next-day-url';
 //     allIds: [1]
 //   },
 //
-//   nextDayUrl: "http://host/api/v1/songs?daysAgo=0"
+//   nextDayUrl: "http://host/api/v1/songs?daysAgo=0",
+//
+//   currentUser: {
+//     token: 'alkj39avma0983a.a09vja3.a098vja'
+//   }
 // }
 //
 // Component structure:
@@ -117,5 +122,6 @@ import nextDayUrl from './next-day-url';
 export default combineReducers({
 	days: days,
 	songs: songs,
-	nextDayUrl: nextDayUrl
+	nextDayUrl: nextDayUrl,
+	currentUser: currentUser
 });
