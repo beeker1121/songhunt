@@ -7,6 +7,8 @@ export const ADD_SONG_SENDING = 'ADD_SONG_SENDING';
 export const ADD_SONG_SUCCESS = 'ADD_SONG_SUCCESS';
 export const ADD_SONG_ERROR = 'ADD_SONG_ERROR';
 
+export const UPVOTE_SUCCESS = 'UPVOTE_SUCCESS';
+
 export const GET_SONG_EMBED_HTML_SUCCESS = 'GET_SONG_EMBED_HTML_SUCCESS';
 export const GET_SONG_EMBED_HTML_ERROR = 'GET_SONG_EMBED_HTML_ERROR';
 
@@ -117,6 +119,15 @@ export const addSongError = (errors) => {
 	return {
 		type: ADD_SONG_ERROR,
 		errors
+	};
+}
+
+// upvoteSuccess is the action for signaling a song has been successfully
+// upvoted.
+export const upvoteSuccess = (id) => {
+	return {
+		type: UPVOTE_SUCCESS,
+		id
 	};
 }
 

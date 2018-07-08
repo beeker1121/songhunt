@@ -1,8 +1,10 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
+import { upvoteSuccess } from '../actions/songs';
 import SongDetail from './song-detail';
 import styles from '../styles/song.css';
 
@@ -10,7 +12,10 @@ import styles from '../styles/song.css';
 // The Redux store state is passed as the first parameter, which we can then
 // use to create our own object containing properties derived from the state.
 const mapStateToProps = (state, ownProps) => {
-	return { song: state.songs.byId[ownProps.id] };
+	return {
+		song: state.songs.byId[ownProps.id],
+		currentUser: state.currentUser
+	};
 };
 
 // mapDispatchToProps allows us to map the dispatch function of react-redux to
@@ -18,7 +23,9 @@ const mapStateToProps = (state, ownProps) => {
 // we can then use to create our own object with functions using the required
 // action.
 const mapDispatchToProps = (dispatch) => {
-	return {};
+	return {
+		upvoteSuccess: (id) => dispatch(upvoteSuccess(id))
+	};
 };
 
 // ConnectedSong is the song component, which will be connected to the Redux
@@ -28,11 +35,12 @@ class ConnectedSong extends React.Component {
 		// Get access to 'this' as subclass.
 		super();
 
-		this.showHideDetail = this.showHideDetail.bind(this);
-
 		this.state = {
 			showDetail: false
 		};
+
+		this.showHideDetail = this.showHideDetail.bind(this);
+		this.upvote = this.upvote.bind(this);
 	}
 
 	showHideDetail() {
@@ -41,6 +49,58 @@ class ConnectedSong extends React.Component {
 		};
 
 		this.setState(newState);
+	}
+
+	upvote(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		// Check if user is logged in.
+		if (this.props.currentUser === null) {
+			this.props.history.push('/login');
+			return;
+		}
+
+		// Create separate variable outside of fetch scope
+		// to store response.ok boolean, since we don't want
+		// to get into Promise-land hell.
+		let resOk;
+		let resStatusCode;
+
+		// Call the API.
+		fetch('/api/songs/' + this.props.song.id.toString() + '/upvote', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + this.props.currentUser.token
+			}
+		}).then((res) => {
+			// Store the ok boolean of the response.
+			resOk = res.ok;
+			resStatusCode = res.status;
+
+			// Parse response body as JSON.
+			//
+			// We use a promise here since the .json() method reads
+			// in the response body in a returned Promise.
+			return res.json();
+		}).then((res) => {
+			// Check if there was an HTTP code error
+			// (res.ok checks if 200 <= res.statusCode <= 299).
+			if (!resOk) {
+				// Redirect to log in page.
+				this.props.history.push('/login');
+				return;
+			}
+
+			// Dispatch success action.
+			this.props.upvoteSuccess(this.props.song.id);
+		}).catch((err) => {
+			// There was a network or some other fetch error,
+			// or, there was a res.json() parse error. Either
+			// way, wrap it in the expected error response
+			// format set to the url parameter.
+		});
 	}
 
 	render() {
@@ -56,9 +116,9 @@ class ConnectedSong extends React.Component {
 						<span className={styles.artist}>{this.props.song.artist}</span>
 					</div>
 
-					<div className={styles.upvotes}>
+					<div className={styles.upvotes} onClick={this.upvote}>
 						<div className={styles.arrow}></div>
-						<span>123</span>
+						<span>{this.props.song.upvotes}</span>
 					</div>
 				</div>
 				{this.state.showDetail &&
@@ -77,4 +137,4 @@ ConnectedSong.propTypes = {
 // Song is the react-redux connected song component.
 const Song = connect(mapStateToProps, mapDispatchToProps)(ConnectedSong);
 
-export default Song;
+export default withRouter(Song);

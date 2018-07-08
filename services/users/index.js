@@ -136,6 +136,11 @@ class Service {
 		return this.db.users.getById(id);
 	}
 
+	// getUpvotes handles getting all upvotes for a user.
+	getUpvotes(id) {
+		return this.db.upvotes.getByUserId(id);
+	}
+
 	// login handles logging a member in.
 	login(opts) {
 		return new Promise((resolve, reject) => {

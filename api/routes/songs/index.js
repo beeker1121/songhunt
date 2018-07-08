@@ -1,5 +1,5 @@
 // App imports.
-const auth = require('../middleware/auth');
+const auth = require('../../middleware/auth');
 
 // handleGet handles GET requests to the /api/songs endpoint.
 const handleGet = (app, services) => {
