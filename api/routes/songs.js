@@ -1,3 +1,6 @@
+// App imports.
+const auth = require('../middleware/auth');
+
 // handleGet handles GET requests to the /api/songs endpoint.
 const handleGet = (app, services) => {
 	app.get('/api/songs', (req, res, next) => {
@@ -38,10 +41,10 @@ const handleGet = (app, services) => {
 
 // handlePost handles POST requests to the /api/songs endpoint.
 const handlePost = (app, services) => {
-	app.post('/api/songs', (req, res, next) => {
+	app.post('/api/songs', auth.authJWT(services), (req, res, next) => {
 		// Create a new song.
 		services.songs.create({
-			userId: 1,
+			userId: req.user.id,
 			title: req.body.title,
 			artist: req.body.artist,
 			url: req.body.url

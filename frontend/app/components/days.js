@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 // App imports.
@@ -14,7 +15,8 @@ import styles from '../styles/days.css';
 const mapStateToProps = (state, ownProps) => {
 	return {
 		days: state.days,
-		nextDayUrl: state.nextDayUrl
+		nextDayUrl: state.nextDayUrl,
+		currentUser: state.currentUser
 	};
 };
 
@@ -53,6 +55,15 @@ class ConnectedDays extends React.Component {
 	}
 
 	render() {
+		// Handle the song form.
+		let SongFormDisplay;
+		if (this.props.currentUser === null)
+			SongFormDisplay = () => (
+				<div className={styles.song_form_sign_up}>Want to share your favorite tracks? <Link to="/signup">Sign up</Link> now and start posting!</div>
+			);
+		else
+			SongFormDisplay = SongForm;
+
 		// Loop through the days.
 		const List = this.props.days.allIds.map((key) => {
 			return (
@@ -62,7 +73,7 @@ class ConnectedDays extends React.Component {
 
 		return (
 			<div className={styles.days}>
-				<SongForm />
+				<SongFormDisplay />
 				{List}
 
 				<div className={styles.show_more}><span onClick={this.getSongs}>Load more...</span></div>

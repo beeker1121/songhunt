@@ -131,6 +131,11 @@ class Service {
 		});
 	}
 
+	// getById gets a user by their ID.
+	getById(id) {
+		return this.db.users.getById(id);
+	}
+
 	// login handles logging a member in.
 	login(opts) {
 		return new Promise((resolve, reject) => {

@@ -7,6 +7,15 @@ import { addSongSuccess } from '../actions/songs';
 import styles from '../styles/song_form.css';
 import gStyles from '../styles/style.css';
 
+// mapStateToProps will map the Redux store state to our component properties.
+// The Redux store state is passed as the first parameter, which we can then
+// use to create our own object containing properties derived from the state.
+const mapStateToProps = (state, ownProps) => {
+	return {
+		currentUser: state.currentUser
+	};
+};
+
 // mapDispatchToProps allows us to map the dispatch function of react-redux to
 // our component. The dispatch function is passed as the first parameter, which
 // we can then use to create our own object with functions using the required
@@ -72,7 +81,8 @@ class ConnectedSongForm extends React.Component {
 			method: 'POST',
 			body: JSON.stringify(song),
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + this.props.currentUser.token
 			}
 		}).then((res) => {
 			// Store the ok boolean of the response.
@@ -168,6 +178,6 @@ ConnectedSongForm.propTypes = {
 };
 
 // SongForm is the react-redux connected song form component.
-const SongForm = connect(null, mapDispatchToProps)(ConnectedSongForm);
+const SongForm = connect(mapStateToProps, mapDispatchToProps)(ConnectedSongForm);
 
 export default SongForm;

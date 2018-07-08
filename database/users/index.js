@@ -6,6 +6,12 @@ SET created_at=?,
 	password=?
 `;
 
+const getByIdQuery = `
+SELECT *
+FROM songhunt.users
+WHERE id=?
+`
+
 const getByEmailQuery = `
 SELECT *
 FROM songhunt.users
@@ -48,12 +54,35 @@ class Database {
 		});
 	}
 
+	// getById gets a user by their ID.
+	getById(id) {
+		return new Promise((resolve, reject) => {
+			// Get from the database.
+			this.db.query(getByIdQuery, [id], (err, res) => {
+				if (err)
+					return reject(err);
+
+				// If no user was found for this
+				// email, return null.
+				if (res.length === 0)
+					return resolve(null);
+
+				// Create a new user object.
+				let user = {
+					id: res[0].id,
+					created_at: res[0].createdAt,
+					email: res[0].email,
+					password: res[0].password
+				};
+
+				resolve(user);
+			});
+		});
+	}
+
 	// getByEmail gets a user by their email address.
 	getByEmail(email) {
 		return new Promise((resolve, reject) => {
-			// Set the created at time.
-			let createdAt = new Date();
-
 			// Get from the database.
 			this.db.query(getByEmailQuery, [email], (err, res) => {
 				if (err)
