@@ -184,9 +184,11 @@ class ConnectedSong extends React.Component {
 						<span className={styles.artist}>{this.props.song.artist}</span>
 					</div>
 
-					<div className={styles.upvotes} onClick={this.toggleUpvote}>
-						<div className={UpvoteArrowStyle}></div>
-						<span>{this.props.song.upvotes}</span>
+					<div className={styles.upvotes_container}>
+						<div className={styles.upvotes} onClick={this.toggleUpvote}>
+							<div className={UpvoteArrowStyle}></div>
+							<span>{this.props.song.upvotes}</span>
+						</div>
 					</div>
 				</div>
 				{this.state.showDetail &&

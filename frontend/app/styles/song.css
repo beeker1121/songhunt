@@ -1,4 +1,5 @@
-.song {margin: 0 0 8px 0; width: 100%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);}
+.song {margin: 0; width: 100%; background: #fff; border-bottom: 2px dashed #eaeaea; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);}
+.song:last-child {border-bottom: 0;}
 .header {display: table; padding: 12px; width: 100%; vertical-align: top; cursor: pointer;}
 .thumbnail {display: table-cell; width: 60px; vertical-align: top;}
 .thumbnail img {width: 60px; height: 60px;}
@@ -6,7 +7,9 @@
 .title {position: relative; display: block; margin: -3px 0 0 0; font-size: 18px; font-weight: 500;}
 .artist {display: block; font-size: 14px; font-weight: 300;}
 
-.upvotes {display: table-cell; vertical-align: top; text-align: right;}
-.arrow {display: inline-block; margin: 11px 0 0 0; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 15px solid #eaeaea;}
+.upvotes_container {display: table-cell; vertical-align: top; text-align: right;}
+.upvotes {display: inline-block; width: auto; text-align: center;}
+.arrow {position: relative; display: inline-block; margin: 11px 0 0 0; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 15px solid #eaeaea;}
+.upvotes:hover .arrow {top: -1px;}
 .upvoted {border-bottom: 15px solid #ff9b25;}
 .upvotes span {display: block; font-size: 20px; font-weight: 300;}
