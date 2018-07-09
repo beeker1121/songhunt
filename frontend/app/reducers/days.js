@@ -14,13 +14,30 @@ const handleGetSongsById = (state, action) => {
 
 	// Create a 'row' for the next day.
 	let day = {
-		songs: []
+		songs: [],
+		songsOrderedByUpvotes: []
 	}
 
 	// Loop through each song and append its
 	// id to the day's songs array.
 	action.songs.forEach((song) => {
 		day.songs.push(song.id);
+	});
+
+	// Create two columned array to hold song
+	// IDs and their upvote counts.
+	let songsIDsAndUpvotes = [];
+	action.songs.forEach((song) => {
+		songsIDsAndUpvotes.push([ song.id, song.upvotes ]);
+	});
+
+	// Sort it.
+	songsIDsAndUpvotes.sort((a, b) => b[1] - a[1]);
+
+	// Loop through so we can add the ordered
+	// song IDs to state.
+	songsIDsAndUpvotes.forEach((song) => {
+		day.songsOrderedByUpvotes.push(song[0]);
 	})
 
 	// Return state with the new day added.
@@ -40,7 +57,8 @@ const handleAddSongById = (state, action) => {
 	return {
 		...state,
 		0: {
-			songs: [ ...state[0].songs, action.song.id ]
+			songs: [ ...state[0].songs, action.song.id ],
+			songsOrderedByUpvotes: [ ...state[0].songsOrderedByUpvotes, action.song.id ]
 		}
 	};
 };

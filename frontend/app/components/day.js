@@ -53,7 +53,7 @@ class ConnectedDay extends React.Component {
 			};
 
 		// Loop through the songs.
-		const List = this.props.day.songs.map((songId) => {
+		const List = this.props.day.songsOrderedByUpvotes.map((songId) => {
 			return (
 				<Song id={songId} key={songId} />
 			);
