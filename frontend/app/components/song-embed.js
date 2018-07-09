@@ -10,6 +10,9 @@ class Embed extends React.Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
+		// If both the embedHtml and embedHtmlError props are unchanged,
+		// do not rerender. We could possibly just extend a React.PureComponent
+		// instead, but this is more verbose.
 		return (this.props.embedHtml != nextProps.embedHtml
 			|| this.props.embedHtmlError != nextProps.embedHtmlError);
 	}
