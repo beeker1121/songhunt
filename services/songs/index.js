@@ -14,25 +14,28 @@ const validateCreateOptions = (opts) => {
 
 	// Validate the options.
 	if (typeof opts.title === 'undefined' || opts.title === null)
-		oes.add(new errors.OptionError('title', 'title cannot be empty'));
+		oes.add(new errors.OptionError('title', 'Title cannot be empty'));
 	else if (typeof opts.title !== 'string')
-		oes.add(new errors.OptionError('title', 'title must be a string'));
+		oes.add(new errors.OptionError('title', 'Title must be a string'));
 	else if (opts.title === '')
-		oes.add(new errors.OptionError('title', 'title cannot be empty'));
+		oes.add(new errors.OptionError('title', 'Title cannot be empty'));
 
 	if (typeof opts.artist === 'undefined' || opts.artist === null)
-		oes.add(new errors.OptionError('artist', 'artist cannot be empty'));
+		oes.add(new errors.OptionError('artist', 'Artist cannot be empty'));
 	else if (typeof opts.artist !== 'string')
-		oes.add(new errors.OptionError('artist', 'artist must be a string'));
+		oes.add(new errors.OptionError('artist', 'Artist must be a string'));
 	else if (opts.artist === '')
-		oes.add(new errors.OptionError('artist', 'artist cannot be empty'));
+		oes.add(new errors.OptionError('artist', 'Artist cannot be empty'));
 
 	if (typeof opts.url === 'undefined' || opts.url === null)
-		oes.add(new errors.OptionError('url', 'url cannot be empty'));
+		oes.add(new errors.OptionError('url', 'URL cannot be empty'));
 	else if (typeof opts.url !== 'string')
-		oes.add(new errors.OptionError('url', 'url must be a string'));
+		oes.add(new errors.OptionError('url', 'URL must be a string'));
 	else if (opts.url === '')
-		oes.add(new errors.OptionError('url', 'url cannot be empty'));
+		oes.add(new errors.OptionError('url', 'URL cannot be empty'));
+	else if (!opts.url.startsWith('http://soundcloud.com/')
+		&& !opts.url.startsWith('https://soundcloud.com/'))
+		oes.add(new errors.OptionError('url', 'Only SoundCloud URLs are accepted'));
 
 	// Return if there are option errors.
 	if (oes.errors.length > 0) {
@@ -141,8 +144,10 @@ class Service {
 						return;
 					}
 
-					// Set the thumbnail URL.
+					// Set the thumbnail URL and use permalink
+					// URL as the song URL.
 					opts.thumbnailUrl = track.artwork_url;
+					opts.url = track.permalink_url;
 
 					// Create the song in the database.
 					this.db.songs.create(opts)

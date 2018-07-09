@@ -43,7 +43,8 @@ class ConnectedSongForm extends React.Component {
 				title: '',
 				artist: '',
 				url: ''
-			}
+			},
+			isSending: false
 		};
 
 		// Set 'this' scope to this class for methods.
@@ -67,6 +68,21 @@ class ConnectedSongForm extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
+
+		// If sending, return.
+		if (this.state.isSending)
+			return;
+
+		// Reset errors and set isSending.
+		this.setState({
+			...this.state,
+			errors: {
+				title: '',
+				artist: '',
+				url: ''
+			},
+			isSending: true
+		});
 
 		// Add the song.
 		let song = { ...this.state };
@@ -102,6 +118,9 @@ class ConnectedSongForm extends React.Component {
 				// Create a copy of the state.
 				let newState = { ...this.state };
 
+				// Set isSending to false.
+				newState.isSending = false;
+
 				// If response is a 400 Bad Request.
 				if (resStatusCode === 400) {
 					// Loop through the errors and add to state.
@@ -126,7 +145,8 @@ class ConnectedSongForm extends React.Component {
 				...this.state,
 				title: '',
 				artist: '',
-				url: ''
+				url: '',
+				isSending: false
 			});
 		}).catch((err) => {
 			// There was a network or some other fetch error,
@@ -138,12 +158,20 @@ class ConnectedSongForm extends React.Component {
 				errors: {
 					...this.state.errors,
 					url: 'Internal server error'
-				}
+				},
+				isSending: false
 			});
 		});
 	}
 
 	render() {
+		// Handle button style.
+		let ButtonStyle;
+		if (this.state.isSending)
+			ButtonStyle = `${gStyles.sh_btn} ${styles.btn} ${gStyles.disabled}`;
+		else
+			ButtonStyle = `${gStyles.sh_btn} ${styles.btn}`;
+
 		return (
 			<div className={styles.song_form}>
 				<form onSubmit={this.handleSubmit}>
@@ -170,7 +198,7 @@ class ConnectedSongForm extends React.Component {
 						<span className={gStyles.param_error}>{this.state.errors.url}</span>
 					}
 
-					<button type="submit" className={`${gStyles.sh_btn} ${styles.btn}`}>Add Song</button>
+					<button type="submit" className={ButtonStyle}>Add Song</button>
 				</form>
 			</div>
 		);

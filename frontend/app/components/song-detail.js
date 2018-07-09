@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
+import Embed from './song-embed';
 import { getSongEmbedHtmlSuccess } from '../actions/songs';
 import styles from '../styles/song_detail.css';
 
@@ -86,26 +87,9 @@ class ConnectedSongDetail extends React.Component {
 	}
 
 	render() {
-		// Handle rendering the embedded player.
-		let Embed;
-
-		// If there was an error trying to get the embed HTML.
-		if (this.state.embedHtmlError !== '')
-			Embed = () => {
-				return(
-					<div className={styles.embed}>{this.state.embedHtmlError}</div>
-				);
-			};
-		else
-			Embed = () => {
-				return(
-					<div className={styles.embed} dangerouslySetInnerHTML={{__html: this.props.song.embedHtml}} />
-				);
-			};
-
 		return (
 			<div className={styles.detail}>
-				<Embed />
+				<Embed embedHtml={this.props.song.embedHtml} embedHtmlError={this.state.embedHtmlError} />
 			</div>
 		);
 	}

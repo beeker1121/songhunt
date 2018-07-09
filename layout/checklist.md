@@ -1,12 +1,15 @@
 ☑ Implement embedded player
 ☑ Header for each day needs to show the date
-☐ Text placeholder for days with no songs
+☑ Text placeholder for days with no songs
 ☑ Song Form component
 	☑ Handle error response from adding a song
 ☐ Finish 'show more link' in footer of Days component
 	☐ Have API return null day next URL when at daysAgo limit, which should prevent show more link from rendering
 ☐ Version API (place all routes into v1)
 ☑ Sidebar
+☐ Enforce SoundCloud URLs only
+☐ Use SoundCloud API URL for posted songs
+☐ Enforce HTTPS prefix for all posted songs
 ☐ Member system
 	☑ Sign up page
 	☑ Log in page
