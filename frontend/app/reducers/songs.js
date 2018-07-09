@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 import {
 	GET_SONGS_SENDING, GET_SONGS_SUCCESS, GET_SONGS_ERROR,
 	ADD_SONG_SENDING, ADD_SONG_SUCCESS, ADD_SONG_ERROR,
-	UPVOTE_SUCCESS,
+	UPVOTE_SUCCESS, UNVOTE_SUCCESS,
 	GET_SONG_EMBED_HTML_SUCCESS, GET_SONG_EMBED_HTML_ERROR
 } from '../actions/songs';
 
@@ -52,6 +52,21 @@ const handleUpvoteSuccessById = (state, action) => {
 
 	// Increment song upvotes.
 	song.upvotes++;
+
+	return {
+		...state,
+		[action.id]: song
+	};
+}
+
+// handleUnvoteSuccessById handles normalizing the response of the unvote
+// success action into the byId section of the songs state table.
+const handleUnvoteSuccessById = (state, action) => {
+	// Pull a copy of the song from state.
+	let song = { ...state[action.id] };
+
+	// Decrement song upvotes.
+	song.upvotes--;
 
 	return {
 		...state,
@@ -108,6 +123,8 @@ const songsById = (state = {}, action = {}) => {
 			return state;
 		case UPVOTE_SUCCESS:
 			return handleUpvoteSuccessById(state, action);
+		case UNVOTE_SUCCESS:
+			return handleUnvoteSuccessById(state, action);
 		case GET_SONG_EMBED_HTML_SUCCESS:
 			return handleGetSongEmbedHtmlSuccessById(state, action);
 		case GET_SONG_EMBED_HTML_ERROR:

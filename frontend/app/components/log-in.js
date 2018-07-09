@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
-import { userLoggedIn } from '../actions/user';
+import { userLoggedIn, userUpvotesSuccess } from '../actions/user';
 import styles from '../styles/log_in.css';
 import gStyles from '../styles/style.css';
 
@@ -21,7 +21,8 @@ const mapStateToProps = (state, ownProps) => {
 // action.
 const mapDispatchToProps = (dispatch) => {
 	return {
-		userLoggedIn: (token) => dispatch(userLoggedIn(token))
+		userLoggedIn: (token) => dispatch(userLoggedIn(token)),
+		userUpvotesSuccess: (upvotes) => dispatch(userUpvotesSuccess(upvotes))
 	};
 };
 
@@ -114,6 +115,40 @@ class ConnectedLogIn extends React.Component {
 
 			// Dispatch success action.
 			this.props.userLoggedIn(res.data.token);
+
+			// Fetch the upvotes for this user.
+			return fetch('/api/upvotes', {
+				method: 'GET',
+				headers: {
+					'Authorization': 'Bearer ' + res.data.token
+				}
+			});
+		}).then((res) => {
+			resOk = res.ok;
+			resStatusCode = res.status;
+
+			return res.json();
+		}).then((res) => {
+			// Check if there was an HTTP code error
+			// (res.ok checks if 200 <= res.statusCode <= 299).
+			if (!resOk) {
+				// Create a copy of the state.
+				let newState = { ...this.state };
+
+				// If response is a 400 Bad Request.
+				if (resStatusCode === 400) {
+					// Loop through the errors and add to state.
+					res.errors.forEach((err) => {
+						newState.errors[err.param] = err.detail;
+					});
+				}
+
+				this.setState(newState);
+				return;
+			}
+
+			// Dispatch success action.
+			this.props.userUpvotesSuccess(res.data);
 
 			// Reset state and signal user is
 			// logged in for redirect.

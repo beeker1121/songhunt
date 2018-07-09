@@ -76,6 +76,40 @@ const validateUpvoteOptions = (opts) => {
 	return;
 };
 
+// validateUnvoteOptions validates the unvote method options.
+const validateUnvoteOptions = (opts) => {
+	// Set opts default value to an empty object
+	// if necessary, so we can check if properties
+	// exist on it.
+	opts = opts || {};
+
+	// Create new OptionErrors to handle any
+	// option validation errors.
+	var oes = new errors.OptionErrors();
+
+	// Validate the options.
+	if (typeof opts.userId === 'undefined' || opts.userId === null)
+		oes.add(new errors.OptionError('user_id', 'User ID cannot be empty'));
+	else if (typeof opts.userId !== 'number')
+		oes.add(new errors.OptionError('user_id', 'User ID must be an integer'));
+	else if (opts.userId === 0)
+		oes.add(new errors.OptionError('user_id', 'User ID cannot be 0'));
+
+	if (typeof opts.songId === 'undefined' || opts.songId === null)
+		oes.add(new errors.OptionError('song_id', 'Song ID cannot be empty'));
+	else if (typeof opts.songId !== 'number')
+		oes.add(new errors.OptionError('song_id', 'Song ID must be an integer'));
+	else if (opts.songId === 0)
+		oes.add(new errors.OptionError('song_id', 'Song ID cannot be 0'));
+
+	// Return if there are option errors.
+	if (oes.errors.length > 0) {
+		return oes;
+	}
+
+	return;
+};
+
 // Service defines the songs service.
 class Service {
 	constructor(db, sc) {
@@ -113,6 +147,8 @@ class Service {
 					// Create the song in the database.
 					this.db.songs.create(opts)
 					.then((song) => {
+						// Add starting upvote count.
+						song.upvotes = 0;
 						resolve(song);
 					}).catch((err) => {
 						reject(err);
@@ -136,11 +172,47 @@ class Service {
 				if (!song)
 					return reject(new errors.OptionError('song_id', 'Song does not exist'));
 
-				// Create a new upvote for this song.
-				this.db.upvotes.create(opts)
+				// Check if this song is already upvoted
+				// by this user.
+				this.db.upvotes.getByUserIdAndSongId(opts.userId, opts.songId)
 				.then((upvote) => {
+					if (upvote)
+						return reject(new errors.OptionError('song_id', 'You already upvoted this song'));
+
+					// Create a new upvote for this song.
+					return this.db.upvotes.create(opts);
+				}).then((upvote) => {
 					// Increment song upvotes.
 					song.upvotes++;
+					resolve(song);
+				}).catch((err) => {
+					reject(err);
+				});
+			}).catch((err) => {
+				reject(err);
+			});
+		});
+	}
+
+	// unvote handles unvoting a song.
+	unvote(opts) {
+		return new Promise((resolve, reject) => {
+			// Validate the options.
+			let oes = validateUnvoteOptions(opts);
+			if (oes)
+				return reject(oes);
+
+			// Get the song from the database.
+			this.db.songs.getByIdWithUpvotes(opts.songId)
+			.then((song) => {
+				if (!song)
+					return reject(new errors.OptionError('song_id', 'Song does not exist'));
+
+				// Delete the upvote for this song.
+				this.db.upvotes.delete(opts)
+				.then(() => {
+					// Decrement song upvotes.
+					song.upvotes--;
 					resolve(song);
 				}).catch((err) => {
 					reject(err);

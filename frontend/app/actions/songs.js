@@ -8,6 +8,7 @@ export const ADD_SONG_SUCCESS = 'ADD_SONG_SUCCESS';
 export const ADD_SONG_ERROR = 'ADD_SONG_ERROR';
 
 export const UPVOTE_SUCCESS = 'UPVOTE_SUCCESS';
+export const UNVOTE_SUCCESS = 'UNVOTE_SUCCESS';
 
 export const GET_SONG_EMBED_HTML_SUCCESS = 'GET_SONG_EMBED_HTML_SUCCESS';
 export const GET_SONG_EMBED_HTML_ERROR = 'GET_SONG_EMBED_HTML_ERROR';
@@ -127,6 +128,15 @@ export const addSongError = (errors) => {
 export const upvoteSuccess = (id) => {
 	return {
 		type: UPVOTE_SUCCESS,
+		id
+	};
+}
+
+// unvoteSuccess is the action for signaling a song has been successfully
+// unvoted.
+export const unvoteSuccess = (id) => {
+	return {
+		type: UNVOTE_SUCCESS,
 		id
 	};
 }

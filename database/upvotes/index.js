@@ -12,6 +12,17 @@ FROM songhunt.upvotes
 WHERE user_id=?
 `;
 
+const getByUserIdAndSongIdQuery = `
+SELECT *
+FROM songhunt.upvotes
+WHERE user_id=? AND song_id=?
+`;
+
+const deleteQuery = `
+DELETE FROM songhunt.upvotes
+WHERE user_id=? AND song_id=?
+`;
+
 // Database defines the upvotes database.
 class Database {
 	constructor(db) {
@@ -69,6 +80,46 @@ class Database {
 				});
 
 				resolve(upvotes);
+			});
+		});
+	}
+
+	// getByUserIdAndSongId handles getting a single upvote for a specific song
+	// by a specific user.
+	getByUserIdAndSongId(userId, songId) {
+		return new Promise((resolve, reject) => {
+			// Query the database.
+			// Get from the database.
+			this.db.query(getByUserIdAndSongIdQuery, [ userId, songId ], (err, res) => {
+				if (err)
+					return reject(err);
+
+				// If no upvote was found, return null.
+				if (res.length === 0)
+					return resolve(null);
+
+				// Create a new upvote object.
+				let upvote = {
+					id: res[0].id,
+					created_at: res[0].created_at,
+					user_id: res[0].user_id,
+					song_id: res[0].song_id
+				};
+
+				resolve(upvote);
+			});
+		});
+	}
+
+	// delete handles deleting an upvote.
+	delete(opts) {
+		return new Promise((resolve, reject) => {
+			// Delete from the database.
+			this.db.query(deleteQuery, [opts.userId, opts.songId], (err, res) => {
+				if (err)
+					return reject(err);
+
+				resolve();
 			});
 		});
 	}

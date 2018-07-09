@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
-import { upvoteSuccess } from '../actions/songs';
+import { upvoteSuccess, unvoteSuccess } from '../actions/songs';
 import SongDetail from './song-detail';
 import styles from '../styles/song.css';
 
@@ -24,7 +24,8 @@ const mapStateToProps = (state, ownProps) => {
 // action.
 const mapDispatchToProps = (dispatch) => {
 	return {
-		upvoteSuccess: (id) => dispatch(upvoteSuccess(id))
+		upvoteSuccess: (id) => dispatch(upvoteSuccess(id)),
+		unvoteSuccess: (id) => dispatch(unvoteSuccess(id))
 	};
 };
 
@@ -40,7 +41,9 @@ class ConnectedSong extends React.Component {
 		};
 
 		this.showHideDetail = this.showHideDetail.bind(this);
+		this.toggleUpvote = this.toggleUpvote.bind(this);
 		this.upvote = this.upvote.bind(this);
+		this.unvote = this.unvote.bind(this);
 	}
 
 	showHideDetail() {
@@ -51,7 +54,7 @@ class ConnectedSong extends React.Component {
 		this.setState(newState);
 	}
 
-	upvote(event) {
+	toggleUpvote(event) {
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -61,6 +64,16 @@ class ConnectedSong extends React.Component {
 			return;
 		}
 
+		// Handle upvoting or unvoting based on current status.
+		if (!this.props.currentUser.upvotes)
+			return;
+		else if (this.props.currentUser.upvotes[this.props.song.id])
+			return this.unvote();
+		else if (!this.props.currentUser.upvotes[this.props.song.id])
+			return this.upvote();
+	}
+
+	upvote() {
 		// Create separate variable outside of fetch scope
 		// to store response.ok boolean, since we don't want
 		// to get into Promise-land hell.
@@ -103,7 +116,62 @@ class ConnectedSong extends React.Component {
 		});
 	}
 
+	unvote() {
+		// Create separate variable outside of fetch scope
+		// to store response.ok boolean, since we don't want
+		// to get into Promise-land hell.
+		let resOk;
+		let resStatusCode;
+
+		// Call the API.
+		fetch('/api/songs/' + this.props.song.id.toString() + '/upvote', {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + this.props.currentUser.token
+			}
+		}).then((res) => {
+			// Store the ok boolean of the response.
+			resOk = res.ok;
+			resStatusCode = res.status;
+
+			// Parse response body as JSON.
+			//
+			// We use a promise here since the .json() method reads
+			// in the response body in a returned Promise.
+			return res.json();
+		}).then((res) => {
+			// Check if there was an HTTP code error
+			// (res.ok checks if 200 <= res.statusCode <= 299).
+			if (!resOk) {
+				// Redirect to log in page.
+				this.props.history.push('/login');
+				return;
+			}
+
+			// Dispatch success action.
+			this.props.unvoteSuccess(this.props.song.id);
+		}).catch((err) => {
+			// There was a network or some other fetch error,
+			// or, there was a res.json() parse error. Either
+			// way, wrap it in the expected error response
+			// format set to the url parameter.
+		});
+	}
+
 	render() {
+		// Handle upvote arrow style, which is based
+		// on if the user upvoted this song or not.
+		let UpvoteArrowStyle;
+		if (this.props.currentUser === null)
+			UpvoteArrowStyle = `${styles.arrow}`;
+		else if (!this.props.currentUser.upvotes)
+			UpvoteArrowStyle = `${styles.arrow}`;
+		else if (this.props.currentUser.upvotes[this.props.song.id])
+			UpvoteArrowStyle = `${styles.arrow} ${styles.upvoted}`;
+		else
+			UpvoteArrowStyle = `${styles.arrow}`;
+
 		return (
 			<div className={styles.song}>
 				<div className={styles.header} onClick={this.showHideDetail}>
@@ -116,8 +184,8 @@ class ConnectedSong extends React.Component {
 						<span className={styles.artist}>{this.props.song.artist}</span>
 					</div>
 
-					<div className={styles.upvotes} onClick={this.upvote}>
-						<div className={styles.arrow}></div>
+					<div className={styles.upvotes} onClick={this.toggleUpvote}>
+						<div className={UpvoteArrowStyle}></div>
 						<span>{this.props.song.upvotes}</span>
 					</div>
 				</div>

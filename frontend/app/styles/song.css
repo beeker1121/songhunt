@@ -7,5 +7,6 @@
 .artist {display: block; font-size: 14px; font-weight: 300;}
 
 .upvotes {display: table-cell; vertical-align: top; text-align: right;}
-.arrow {display: inline-block; margin: 11px 0 0 0; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 15px solid #ff9b25;}
+.arrow {display: inline-block; margin: 11px 0 0 0; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 15px solid #eaeaea;}
+.upvoted {border-bottom: 15px solid #ff9b25;}
 .upvotes span {display: block; font-size: 20px; font-weight: 300;}
