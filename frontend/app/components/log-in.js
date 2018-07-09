@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
-import { userLoggedIn, userUpvotesSuccess } from '../actions/user';
+import { userLoggedIn, getUserUpvotes, getUserUpvotesSuccess } from '../actions/user';
 import styles from '../styles/log_in.css';
 import gStyles from '../styles/style.css';
 
@@ -22,7 +22,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		userLoggedIn: (token) => dispatch(userLoggedIn(token)),
-		userUpvotesSuccess: (upvotes) => dispatch(userUpvotesSuccess(upvotes))
+		getUserUpvotes: (token) => dispatch(getUserUpvotes(token))
 	};
 };
 
@@ -116,48 +116,18 @@ class ConnectedLogIn extends React.Component {
 			// Dispatch success action.
 			this.props.userLoggedIn(res.data.token);
 
-			// Fetch the upvotes for this user.
-			return fetch('/api/upvotes', {
-				method: 'GET',
-				headers: {
-					'Authorization': 'Bearer ' + res.data.token
-				}
-			});
-		}).then((res) => {
-			resOk = res.ok;
-			resStatusCode = res.status;
-
-			return res.json();
-		}).then((res) => {
-			// Check if there was an HTTP code error
-			// (res.ok checks if 200 <= res.statusCode <= 299).
-			if (!resOk) {
-				// Create a copy of the state.
-				let newState = { ...this.state };
-
-				// If response is a 400 Bad Request.
-				if (resStatusCode === 400) {
-					// Loop through the errors and add to state.
-					res.errors.forEach((err) => {
-						newState.errors[err.param] = err.detail;
-					});
-				}
-
-				this.setState(newState);
-				return;
-			}
-
-			// Dispatch success action.
-			this.props.userUpvotesSuccess(res.data);
-
-			// Reset state and signal user is
-			// logged in for redirect.
-			this.setState({
-				...this.state,
-				email: '',
-				password: '',
-				loggedIn: true
-			});
+			// Get the upvotes for this user.
+			this.props.getUserUpvotes(res.data.token)
+			.then(() => {
+				// Reset state and signal user is
+				// logged in for redirect.
+				this.setState({
+					...this.state,
+					email: '',
+					password: '',
+					loggedIn: true
+				});
+			}).catch(() => {});
 		}).catch((err) => {
 			// There was a network or some other fetch error,
 			// or, there was a res.json() parse error. Either
@@ -167,7 +137,7 @@ class ConnectedLogIn extends React.Component {
 				...this.state,
 				errors: {
 					...this.state.errors,
-					confirm_password: 'Internal server error'
+					password: 'Internal server error'
 				}
 			});
 		});

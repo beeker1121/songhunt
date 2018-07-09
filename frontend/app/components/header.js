@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 // App imports.
+import { userLoggedOut } from '../actions/user';
 import styles from '../styles/header.css';
 
 // mapStateToProps will map the Redux store state to our component properties.
@@ -19,7 +20,9 @@ const mapStateToProps = (state, ownProps) => {
 // we can then use to create our own object with functions using the required
 // action.
 const mapDispatchToProps = (dispatch) => {
-	return {};
+	return {
+		userLoggedOut: () => dispatch(userLoggedOut())
+	};
 };
 
 // ConnectedHeader is the application header, which will be connected to the
@@ -32,6 +35,7 @@ const ConnectedHeader = (props) => {
 				<ul className={styles.nav}>
 					<li><Link to='/about'>About</Link></li>
 					<li><Link to='/account'>Account</Link></li>
+					<li className={styles.log_out} onClick={props.userLoggedOut}>Log Out</li>
 				</ul>
 			);
 		};

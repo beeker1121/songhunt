@@ -1,12 +1,12 @@
 // App imports.
-import { USER_LOGGED_IN, USER_LOGGED_OUT, USER_UPVOTES_SUCCESS } from '../actions/user';
+import { USER_LOGGED_IN, USER_LOGGED_OUT, GET_USER_UPVOTES_SUCCESS } from '../actions/user';
 import { UPVOTE_SUCCESS, UNVOTE_SUCCESS } from '../actions/songs';
 
-// handleUserUpvotesSuccess handles creating a map of upvoted songs by ID from
-// the response of the user upvotes success action.
+// handleGetUserUpvotesSuccess handles creating a map of upvoted songs by ID
+// from the response of the user upvotes success action.
 //
 // This is stored alongside the JWT token in the currentUser property of the
-// Redux state. Its form will look like:
+// Redux state. It will be in the form of:
 //
 // currentUser: {
 //   upvotes: {
@@ -17,7 +17,7 @@ import { UPVOTE_SUCCESS, UNVOTE_SUCCESS } from '../actions/songs';
 //
 // Where each propeprty of the upvotes object is a song ID, and it being in the
 // map means this song has been upvoted by this user.
-const handleUserUpvotesSuccess = (state, action) => {
+const handleGetUserUpvotesSuccess = (state, action) => {
 	// Create the map of upvotes by song ID.
 	let upvotes = {};
 
@@ -66,8 +66,8 @@ const currentUser = (state = null, action = {}) => {
 			return { token: action.token };
 		case USER_LOGGED_OUT:
 			return null;
-		case USER_UPVOTES_SUCCESS:
-			return handleUserUpvotesSuccess(state, action);
+		case GET_USER_UPVOTES_SUCCESS:
+			return handleGetUserUpvotesSuccess(state, action);
 		case UPVOTE_SUCCESS:
 			return handleUpvoteSuccess(state, action);
 		case UNVOTE_SUCCESS:
