@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const config = require('./webpack.config.js');
 
 // Set NODE_ENV environment variable to production.
-config.plugins = [];
 config.plugins.push(
 	new webpack.DefinePlugin({
 		'process.env': {

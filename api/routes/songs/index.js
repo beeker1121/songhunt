@@ -1,4 +1,5 @@
 // App imports.
+const config = require('../../config');
 const auth = require('../../middleware/auth');
 
 // handleGet handles GET requests to the /api/songs endpoint.
@@ -23,9 +24,9 @@ const handleGet = (app, services) => {
 			// Set the prev and next values for links
 			// in the response.
 			if (opts.daysAgo > 0) {
-				response.links.prev = 'http://104.197.141.188/api/songs?days_ago=' + (opts.daysAgo - 1);
+				response.links.prev = config.scheme + '://' + config.host + '/api/songs?days_ago=' + (opts.daysAgo - 1);
 			}
-			response.links.next = 'http://104.197.141.188/api/songs?days_ago=' + (opts.daysAgo + 1);
+			response.links.next = config.scheme + '://' + config.host + '/api/songs?days_ago=' + (opts.daysAgo + 1);
 		}
 
 		// Get the songs.

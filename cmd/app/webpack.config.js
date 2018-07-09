@@ -1,4 +1,6 @@
-module.exports = {
+const webpack = require('webpack');
+
+const config = {
 	context: __dirname,
 	entry: '../../frontend/app/index.js',
 	output: {
@@ -38,5 +40,17 @@ module.exports = {
 				]
 			}
 		]
-	}
+	},
+	plugins: []
 };
+
+config.plugins.push(
+	new webpack.DefinePlugin({
+		'process.env': {
+			'SCHEME': JSON.stringify(process.env.SCHEME),
+			'HOST': JSON.stringify(process.env.HOST)
+		}
+	})
+);
+
+module.exports = config;

@@ -49,10 +49,14 @@ Set the required environment variables:
 export DB_HOST="localhost"
 export DB_USER="your_username"
 export DB_PASS="your_password"
+export SCHEME="http"
+export HOST="yoursite.com"
 export PORT=80
 export JWT_SECRET="random_jwt_secret_string"
 export SOUNDCLOUD_CLIENT_ID="your_soundcloud_client_id"
 ```
+
+These settings are used in the configuration files for both the backend and frontend applications.
 
 Now we can start the application in development mode:
 

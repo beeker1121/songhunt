@@ -4,7 +4,9 @@
 	"description": "Find the best music sourced daily",
 	"scripts": {
 		"build:dev": "mkdir -p dist/public && cp -r node_modules ../../frontend/app && cp -r ../../frontend/public dist && webpack --mode development --config webpack.config.js",
-		"start:dev": "NODE_ENV=development node main.js"
+		"build:prod": "mkdir -p dist/public && cp -r node_modules ../../frontend/app && cp -r ../../frontend/public dist && webpack --mode production --config webpack.config.prod.js",
+		"start:dev": "NODE_ENV=development node main.js",
+		"start:prod": "NODE_ENV=production node main.js"
 	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
