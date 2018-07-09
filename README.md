@@ -50,6 +50,7 @@ export DB_HOST="localhost"
 export DB_USER="your_username"
 export DB_PASS="your_password"
 export PORT=80
+export JWT_SECRET="random_jwt_secret_string"
 export SOUNDCLOUD_CLIENT_ID="your_soundcloud_client_id"
 ```
 
@@ -67,11 +68,11 @@ Below is the list of technology used for this project:
 
 - Docker
 - Node.js
-- JavaScript (ES2016/ES7)
+- JavaScript (ES2015/ES6)
 - Express
 - React
 - React Router v4
 - Redux
 - Webpack
-- PostgreSQL
+- MySQL
 - JWT Authentication
