@@ -35,6 +35,11 @@ db.connect((err) => {
 	}
 });
 
+// Keep connection alive, look into
+// pooling connections and/or managing
+// disconnect event.
+setInterval(() => db.query('SELECT 1'), 5000);
+
 // Create new express app.
 const app = express();
 
