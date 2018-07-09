@@ -1,8 +1,10 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
+import { userLoggedIn } from '../actions/user';
 import styles from '../styles/sign_up.css';
 import gStyles from '../styles/style.css';
 
@@ -18,7 +20,9 @@ const mapStateToProps = (state, ownProps) => {
 // we can then use to create our own object with functions using the required
 // action.
 const mapDispatchToProps = (dispatch) => {
-	return {};
+	return {
+		userLoggedIn: (token) => dispatch(userLoggedIn(token))
+	};
 };
 
 // ConnectedSignUp is the sign up page component, which will be connected to
@@ -110,8 +114,8 @@ class ConnectedSignUp extends React.Component {
 				return;
 			}
 
-			// Dispatch success action.
-			//this.props.signUpSuccess(res.data);
+			// Dispatch logged in action.
+			this.props.userLoggedIn(res.data.token);
 
 			// Reset state.
 			this.setState({
@@ -120,6 +124,8 @@ class ConnectedSignUp extends React.Component {
 				password: '',
 				confirm_password: ''
 			});
+
+			this.props.history.push('/');
 		}).catch((err) => {
 			// There was a network or some other fetch error,
 			// or, there was a res.json() parse error. Either
@@ -172,4 +178,4 @@ ConnectedSignUp.propTypes = {};
 // SignUp is the react-redux connected sign up component.
 const SignUp = connect(null, mapDispatchToProps)(ConnectedSignUp);
 
-export default SignUp;
+export default withRouter(SignUp);

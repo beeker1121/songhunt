@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // App imports.
-import { userLoggedIn, getUserUpvotes, getUserUpvotesSuccess } from '../actions/user';
+import { userLoggedIn, getUserUpvotes } from '../actions/user';
 import styles from '../styles/log_in.css';
 import gStyles from '../styles/style.css';
 
