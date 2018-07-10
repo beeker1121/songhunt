@@ -36,3 +36,4 @@ label {display: block; text-transform: uppercase;}
 
 /* Input */
 .sh_input {padding: 5px 8px; border: 1px solid #ccc;}
+.sh_input::placeholder {color: #999;}

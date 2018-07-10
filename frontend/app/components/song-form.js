@@ -189,7 +189,7 @@ class ConnectedSongForm extends React.Component {
 						</div>
 						<div className={styles.top_right}>
 							<label htmlFor="genre">Genre</label>
-							<input type="text" id="genre" name="genre" className={gStyles.sh_input} value={this.state.genre} onChange={this.handleChange} />
+							<input type="text" id="genre" name="genre" className={gStyles.sh_input} value={this.state.genre} placeholder="Electronic" onChange={this.handleChange} />
 							{this.state.errors.genre !== '' &&
 								<span className={gStyles.param_error}>{this.state.errors.genre}</span>
 							}
