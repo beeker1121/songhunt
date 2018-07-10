@@ -8,16 +8,13 @@ Check it out here: [http://songhunt.io/](http://songhunt.io/)
 
 ## Project Details
 
-- Member system
-- Users must login to post and upvote songs
-- Song plays in embedded streamer in drop down info for song, above comments
-- Songs can be commented on
-- Have users enter the URL, title, and artist of the song
-- Only free streaming sites that require no login, such as SoundCloud and YouTube, are allowed
-	- Check URL prefixes to enforce
-- Have time cut off, so after 6 PM, any songs added start on the list for the next day
-- Songs cannot be reposted for one year
-- Login system via Facebook, SoundCloud, and Twitter (maybe Google?)
+- [x] Member system
+- [x] Users must login to post and upvote songs
+- [x] Song plays in embedded streamer in drop down info for song
+- [ ] Commenting system
+- [x] Allow SoundCloud tracks
+- [ ] Allow YouTube tracks
+- [ ] Login system via Facebook, SoundCloud, and Twitter (maybe Google?)
 
 ## Installation
 
@@ -85,13 +82,13 @@ npm run start:prod
 
 Below is the list of technology used for this project:
 
-☐ Docker  
-☑ Node.js  
-☑ JavaScript (ES2015/ES6)  
-☑ Express  
-☑ React  
-☑ React Router v4  
-☑ Redux  
-☑ Webpack  
-☑ MySQL  
-☑ JWT Authentication
+- [ ] Docker  
+- [x] Node.js  
+- [x] JavaScript (ES2015/ES6)  
+- [x] Express  
+- [x] React  
+- [x] React Router v4  
+- [x] Redux  
+- [x] Webpack  
+- [x] MySQL  
+- [x] JWT Authentication
