@@ -2,6 +2,10 @@
 
 Song Hunt is a website for finding the best music daily, curated by the online community.
 
+Check it out here: [http://songhunt.io/](http://songhunt.io/)
+
+![Song Hunt Preview](https://raw.githubusercontent.com/beeker1121/songhunt/master/preview.gif)
+
 ## Project Details
 
 - Member system

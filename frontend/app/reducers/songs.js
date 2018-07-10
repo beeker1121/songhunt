@@ -8,9 +8,9 @@ import {
 	GET_SONG_EMBED_HTML_SUCCESS, GET_SONG_EMBED_HTML_ERROR
 } from '../actions/songs';
 
-// handleGetSongsById handles normalizing the response of the get songs action
-// into the byId section of the songs state table.
-const handleGetSongsById = (state, action) => {
+// handleGetSongsSuccessById handles normalizing the response of the get songs
+// success action into the byId section of the songs state table.
+const handleGetSongsSuccessById = (state, action) => {
 	// Copy over state.
 	let newState = { ...state };
 
@@ -28,9 +28,9 @@ const handleGetSongsById = (state, action) => {
 	return newState;
 };
 
-// handleAddSongById handles normalizing the response of the add song action
-// into the byId section of the songs state table.
-const handleAddSongById = (state, action) => {
+// handleAddSongSuccessById handles normalizing the response of the add song
+// success action into the byId section of the songs state table.
+const handleAddSongSuccessById = (state, action) => {
 	let song = action.song;
 
 	// Add the embedHtml and embedHtmlError
@@ -109,18 +109,10 @@ const handleGetSongEmbedHtmlErrorById = (state, action) => {
 // songsById is the reducer for the byId section of the songs state table.
 const songsById = (state = {}, action = {}) => {
 	switch (action.type) {
-		case GET_SONGS_SENDING:
-			return state;
 		case GET_SONGS_SUCCESS:
-			return handleGetSongsById(state, action);
-		case GET_SONGS_ERROR:
-			return state;
-		case ADD_SONG_SENDING:
-			return state;
+			return handleGetSongsSuccessById(state, action);
 		case ADD_SONG_SUCCESS:
-			return handleAddSongById(state, action);
-		case ADD_SONG_ERROR:
-			return state;
+			return handleAddSongSuccessById(state, action);
 		case UPVOTE_SUCCESS:
 			return handleUpvoteSuccessById(state, action);
 		case UNVOTE_SUCCESS:
@@ -134,9 +126,9 @@ const songsById = (state = {}, action = {}) => {
 	}
 }
 
-// handleGetSongsAllIds handles normalizing the response of the get songs
-// action into the allIds section of the songs state table.
-const handleGetSongsAllIds = (state, action) => {
+// handleGetSongsSuccessAllIds handles normalizing the response of the get
+// songs success action into the allIds section of the songs state table.
+const handleGetSongsSuccessAllIds = (state, action) => {
 	// Copy over state.
 	let newState = [ ...state ];
 
@@ -149,33 +141,44 @@ const handleGetSongsAllIds = (state, action) => {
 	return newState;
 };
 
-// handleAddSongAllIds handles normalizing the response of the add song action
-// into the allIds section of the songs state table.
-const handleAddSongAllIds = (state, action) => {
+// handleAddSongSuccessAllIds handles normalizing the response of the add song
+// success action into the allIds section of the songs state table.
+const handleAddSongSuccessAllIds = (state, action) => {
 	return [ ...state, action.song.id ];
 }
 
 // songsAllIds is the reducer for the allIds section of the songs state table.
 const songsAllIds = (state = {}, action = {}) => {
 	switch (action.type) {
-		case GET_SONGS_SENDING:
-			return state;
 		case GET_SONGS_SUCCESS:
-			return handleGetSongsAllIds(state, action);
-		case GET_SONGS_ERROR:
-			return state;
-		case ADD_SONG_SENDING:
-			return state;
+			return handleGetSongsSuccessAllIds(state, action);
 		case ADD_SONG_SUCCESS:
-			return handleAddSongAllIds(state, action);
-		case ADD_SONG_ERROR:
-			return state;
+			return handleAddSongSuccessAllIds(state, action);
 		default:
 			return state;
 	}
 }
 
 // songs is the reducer for the songs state table.
+//
+// Redux state layout:
+//
+// {
+//   ...state,
+//   songs: {
+//     byId: {
+//       1: {
+//         id: 1,
+//         title: "Hours",
+//         artist: "Billboard",
+//         ...
+//         comments: [1, 2],
+//         upvotes: 123
+//       }
+//     },
+//     allIds: [1]
+//   }
+// }
 const songs = combineReducers({
 	byId: songsById,
 	allIds: songsAllIds

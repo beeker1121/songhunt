@@ -44,6 +44,7 @@ const config = {
 	plugins: []
 };
 
+// Make environment variables available to modules via the process.env object.
 config.plugins.push(
 	new webpack.DefinePlugin({
 		'process.env': {

@@ -14,4 +14,10 @@ const nextDayUrl = (state = config.scheme + '://' + config.host + '/api/songs?da
 	}
 };
 
+// Redux state layout:
+//
+// {
+//   ...state,
+//   nextDayUrl: "http://site.com/api/songs?days_ago=0"
+// }
 module.exports = nextDayUrl;

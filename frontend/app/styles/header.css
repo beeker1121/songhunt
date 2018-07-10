@@ -4,7 +4,7 @@
 .logo {display: inline-block;}
 .logo a {color: #333; font-size: 20px; font-weight: 900; text-transform: uppercase;}
 
-.nav {display: inline-block; float: right; margin: 0; padding: 0; list-style: none;}
+.nav {display: inline-block; float: right; margin: 3px 0 0 0; padding: 0; list-style: none;}
 .nav li {display: inline-block; margin: 0 18px 0 0; padding: 0; font-size: 16px; font-weight: 300;}
 .nav li:last-child {margin: 0;}
 .nav li a {color: #333;}

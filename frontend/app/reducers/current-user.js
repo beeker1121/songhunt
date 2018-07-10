@@ -2,6 +2,11 @@
 import { USER_LOGGED_IN, USER_LOGGED_OUT, GET_USER_UPVOTES_SUCCESS } from '../actions/user';
 import { UPVOTE_SUCCESS, UNVOTE_SUCCESS } from '../actions/songs';
 
+// handleUserLoggedIn handles the user logged in action.
+const handleUserLoggedIn = (state, action) => {
+	return { token: action.token };
+}
+
 // handleGetUserUpvotesSuccess handles creating a map of upvoted songs by ID
 // from the response of the user upvotes success action.
 //
@@ -9,6 +14,7 @@ import { UPVOTE_SUCCESS, UNVOTE_SUCCESS } from '../actions/songs';
 // Redux state. It will be in the form of:
 //
 // currentUser: {
+//   token: ...,
 //   upvotes: {
 //     123: true,
 //     124: true
@@ -63,7 +69,7 @@ const handleUnvoteSuccess = (state, action) => {
 const currentUser = (state = null, action = {}) => {
 	switch (action.type) {
 		case USER_LOGGED_IN:
-			return { token: action.token };
+			return handleUserLoggedIn(state, action);
 		case USER_LOGGED_OUT:
 			return null;
 		case GET_USER_UPVOTES_SUCCESS:
@@ -77,4 +83,15 @@ const currentUser = (state = null, action = {}) => {
 	}
 };
 
+// Redux state layout:
+//
+// {
+//   ...state,
+//   currentUser: {
+//     token: 'alkj39avma0983a.a09vja3.a098vja'
+//     upvotes: [1, 2, 3]
+//   }
+// }
+//
+// Where the 'upvotes' property stores the song IDs upvotes by the user.
 module.exports = currentUser;
