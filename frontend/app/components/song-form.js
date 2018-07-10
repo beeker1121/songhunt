@@ -38,10 +38,12 @@ class ConnectedSongForm extends React.Component {
 		this.state = {
 			title: '',
 			artist: '',
+			genre: '',
 			url: '',
 			errors: {
 				title: '',
 				artist: '',
+				genre: '',
 				url: ''
 			},
 			isSending: false
@@ -53,17 +55,10 @@ class ConnectedSongForm extends React.Component {
 	}
 
 	handleChange(event) {
-		switch (event.target.id) {
-			case 'title':
-				this.setState({ title: event.target.value});
-				break;
-			case 'artist':
-				this.setState({ artist: event.target.value});
-				break;
-			case 'url':
-				this.setState({ url: event.target.value});
-				break;
-		}
+		this.setState({
+			...this.state,
+			[event.target.id]: event.target.value
+		});
 	}
 
 	handleSubmit(event) {
@@ -79,6 +74,7 @@ class ConnectedSongForm extends React.Component {
 			errors: {
 				title: '',
 				artist: '',
+				genre: '',
 				url: ''
 			},
 			isSending: true
@@ -145,6 +141,7 @@ class ConnectedSongForm extends React.Component {
 				...this.state,
 				title: '',
 				artist: '',
+				genre: '',
 				url: '',
 				isSending: false
 			});
@@ -183,11 +180,18 @@ class ConnectedSongForm extends React.Component {
 								<span className={gStyles.param_error}>{this.state.errors.title}</span>
 							}
 						</div>
-						<div className={styles.top_right}>
+						<div className={styles.top_middle}>
 							<label htmlFor="artist">Artist</label>
 							<input type="text" id="artist" name="artist" className={gStyles.sh_input} value={this.state.artist} onChange={this.handleChange} />
 							{this.state.errors.artist !== '' &&
 								<span className={gStyles.param_error}>{this.state.errors.artist}</span>
+							}
+						</div>
+						<div className={styles.top_right}>
+							<label htmlFor="genre">Genre</label>
+							<input type="text" id="genre" name="genre" className={gStyles.sh_input} value={this.state.genre} onChange={this.handleChange} />
+							{this.state.errors.genre !== '' &&
+								<span className={gStyles.param_error}>{this.state.errors.genre}</span>
 							}
 						</div>
 					</div>

@@ -2,8 +2,10 @@
 
 .top {display: table; margin: 0 0 8px 0; width: 100%;}
 
-.top_left {display: table-cell; padding: 0 4px 0 0; width: 50%;}
+.top_left {display: table-cell; padding: 0 4px 0 0; width: 33%;}
 .top_left input {width: 100%;}
+.top_middle {display: table-cell; padding: 0 4px 0 0; width: 33%;}
+.top_middle input {width: 100%;}
 .top_right {display: table-cell; width: 50%;}
 .top_right input {width: 100%;}
 

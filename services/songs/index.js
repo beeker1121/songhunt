@@ -19,6 +19,8 @@ const validateCreateOptions = (opts) => {
 		oes.add(new errors.OptionError('title', 'Title must be a string'));
 	else if (opts.title === '')
 		oes.add(new errors.OptionError('title', 'Title cannot be empty'));
+	else if (opts.title.length > 75)
+		oes.add(new errors.OptionError('title', 'Title cannot be longer than 75 characters'));
 
 	if (typeof opts.artist === 'undefined' || opts.artist === null)
 		oes.add(new errors.OptionError('artist', 'Artist cannot be empty'));
@@ -26,6 +28,17 @@ const validateCreateOptions = (opts) => {
 		oes.add(new errors.OptionError('artist', 'Artist must be a string'));
 	else if (opts.artist === '')
 		oes.add(new errors.OptionError('artist', 'Artist cannot be empty'));
+	else if (opts.artist.length > 45)
+		oes.add(new errors.OptionError('artist', 'Artist cannot be longer than 45 characters'));
+
+	if (typeof opts.genre === 'undefined' || opts.genre === null)
+		oes.add(new errors.OptionError('genre', 'Genre cannot be empty'));
+	else if (typeof opts.genre !== 'string')
+		oes.add(new errors.OptionError('genre', 'Genre must be a string'));
+	else if (opts.genre === '')
+		oes.add(new errors.OptionError('genre', 'Genre cannot be empty'));
+	else if (opts.genre.length > 45)
+		oes.add(new errors.OptionError('genre', 'Genre cannot be longer than 45 characters'));
 
 	if (typeof opts.url === 'undefined' || opts.url === null)
 		oes.add(new errors.OptionError('url', 'URL cannot be empty'));
@@ -36,6 +49,8 @@ const validateCreateOptions = (opts) => {
 	else if (!opts.url.startsWith('http://soundcloud.com/')
 		&& !opts.url.startsWith('https://soundcloud.com/'))
 		oes.add(new errors.OptionError('url', 'Only SoundCloud URLs are accepted'));
+	else if (opts.url.length > 512)
+		oes.add(new errors.OptionError('url', 'URL cannot be longer than 512 characters'));
 
 	// Return if there are option errors.
 	if (oes.errors.length > 0) {

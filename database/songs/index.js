@@ -27,6 +27,7 @@ SET user_id=?,
 	created_at=?,
 	title=?,
 	artist=?,
+	genre=?,
 	url=?,
 	thumbnail_url=?
 `;
@@ -89,6 +90,7 @@ class Database {
 						created_at: row.created_at,
 						title: row.title,
 						artist: row.artist,
+						genre: row.genre,
 						url: row.url,
 						thumbnail_url: row.thumbnail_url
 					};
@@ -155,6 +157,7 @@ class Database {
 						created_at: row.created_at,
 						title: row.title,
 						artist: row.artist,
+						genre: row.genre,
 						url: row.url,
 						thumbnail_url: row.thumbnail_url,
 						upvotes: row.upvotes
@@ -190,6 +193,7 @@ class Database {
 					created_at: res[0].created_at,
 					title: res[0].title,
 					artist: res[0].artist,
+					genre: res[0].genre,
 					url: res[0].url,
 					thumbnail_url: res[0].thumbnail_url,
 					upvotes: res[0].upvotes
@@ -207,7 +211,7 @@ class Database {
 			let createdAt = new Date();
 
 			// Save to the database.
-			this.db.query(createQuery, [opts.userId, createdAt, opts.title, opts.artist, opts.url, opts.thumbnailUrl], (err, res) => {
+			this.db.query(createQuery, [opts.userId, createdAt, opts.title, opts.artist, opts.genre, opts.url, opts.thumbnailUrl], (err, res) => {
 				if (err)
 					return reject(err);
 
@@ -218,6 +222,7 @@ class Database {
 					created_at: createdAt,
 					title: opts.title,
 					artist: opts.artist,
+					genre: opts.genre,
 					url: opts.url,
 					thumbnail_url: opts.thumbnailUrl
 				};

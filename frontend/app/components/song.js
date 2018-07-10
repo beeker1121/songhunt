@@ -182,6 +182,7 @@ class ConnectedSong extends React.Component {
 					<div className={styles.info}>
 						<span className={styles.title}>{this.props.song.title}</span>
 						<span className={styles.artist}>{this.props.song.artist}</span>
+						<span className={styles.genre}>{this.props.song.genre}</span>
 					</div>
 
 					<div className={styles.upvotes_container}>

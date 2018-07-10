@@ -48,6 +48,7 @@ const handlePost = (app, services) => {
 			userId: req.user.id,
 			title: req.body.title,
 			artist: req.body.artist,
+			genre: req.body.genre,
 			url: req.body.url
 		}).then((song) => {
 			res.json({ data: song });

@@ -6,6 +6,7 @@
 .info {display: table-cell; padding: 0 8px; vertical-align: top;}
 .title {position: relative; display: block; margin: -3px 0 0 0; font-size: 18px; font-weight: 500;}
 .artist {display: block; font-size: 14px; font-weight: 300;}
+.genre {display: inline-block; margin: 5px 0 0 0; padding: 1px 4px; font-family: "Source Sans Pro", sans serif; font-size: 11px; color: #999; background-color: #eaeaea; text-transform: uppercase;}
 
 .upvotes_container {display: table-cell; vertical-align: top; text-align: right;}
 .upvotes {display: inline-block; width: auto; text-align: center;}

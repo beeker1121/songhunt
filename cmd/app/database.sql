@@ -30,6 +30,7 @@ CREATE TABLE `songs` (
   `created_at` datetime NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `artist` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `genre` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `url` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL,
   `thumbnail_url` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
